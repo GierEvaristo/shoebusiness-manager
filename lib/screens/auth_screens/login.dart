@@ -31,7 +31,7 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Welcome! Please Login',
+              'Welcome! Please Login User',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold
