@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primaryColor: Colors.amber[600],
         primarySwatch: Colors.amber,
-        brightness: Brightness.light,
         textTheme: GoogleFonts.robotoTextTheme()
       ),
     );
