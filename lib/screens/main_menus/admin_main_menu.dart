@@ -11,7 +11,7 @@ class AdminMainMenu extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('Welcome Admin!',
             style: TextStyle(
@@ -65,10 +65,12 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, size: 40),
+        Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: Icon(icon, size: 40),
+        ),
         ElevatedButton(
           onPressed: onPressed,
           child: Text(
