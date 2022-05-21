@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1054219105119",
+    "project_id": "shoesellingmanagementapp",
+    "storage_bucket": "shoesellingmanagementapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054219105119:android:75f5d0948419053b21fcea",
+        "android_client_info": {
+          "package_name": "ph.edu.dlsu.edu.lbycpd2.shoebusiness_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054219105119-v2lt5pd388csd1ff6n15tk5jktqtua7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCayNp2xZaOX6htdcvOwhp9l6r4LZf5_Ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054219105119-v2lt5pd388csd1ff6n15tk5jktqtua7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
