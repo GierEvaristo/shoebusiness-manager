@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoebusiness_manager/main.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -91,6 +92,14 @@ class _LoginState extends State<Login> {
   }
 
   void signIn() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          Center(
+            child: CircularProgressIndicator()
+          )
+    );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
@@ -102,6 +111,7 @@ class _LoginState extends State<Login> {
         print('Wrong password provided for that user.');
       }
     }
+    navigatorKey.currentState!.popUntil((route)=>route.isFirst);
   }
 }
 
