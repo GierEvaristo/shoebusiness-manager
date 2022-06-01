@@ -38,7 +38,7 @@ class CompanyMenu extends StatelessWidget {
                   text: 'Back',
                   icon: Icons.logout,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/main_menu');
+                    Navigator.pop(context);
                   }
               ),
             ],
