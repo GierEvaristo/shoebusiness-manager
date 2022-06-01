@@ -10,6 +10,12 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+
+  List<String> items = List.generate(
+    15,
+    (index) => 'Item ${index + 1}',
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,19 +33,73 @@ class _InventoryState extends State<Inventory> {
               textDirection: TextDirection.ltr,
             ),
             Row(
-              children: [
-                TextField( // email
-                  //controller: ,
-                  //onChanged: (val){},
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(
+                    child: TextField( // email
+                      //controller: ,
+                      //onChanged: (val){},
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          labelText: 'Search Model',
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20),
                       ),
-                      labelText: 'Search Model',
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+
+                  },
+                  icon:Icon(
+                    Icons.search
                   ),
                 ),
               ],
+            ),
+            Expanded(
+              child: SizedBox(
+                child: ListView.builder(
+                  padding:  EdgeInsets.all(8),
+                  itemCount: items.length + 1,
+                  itemBuilder: (conext, index){
+                    if(index < items.length){
+                      final item = items[index];
+                      return ListTile(title: Text(item));
+                    } else{
+                      return  Padding(
+                        padding:  EdgeInsets.symmetric(vertical: 32),
+                        child:(Center(child:CircularProgressIndicator())),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+
+                  },
+                  child: Text(
+                    'Back',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+
+                  },
+                  child: Text(
+                    'Edit',
+                  ),
+                ),
+
+              ],
+
             ),
           ],
         ),
