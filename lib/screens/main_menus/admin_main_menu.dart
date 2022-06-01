@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shoebusiness_manager/main.dart';
 
 class AdminMainMenu extends StatelessWidget {
   const AdminMainMenu({Key? key}) : super(key: key);
@@ -23,7 +24,9 @@ class AdminMainMenu extends StatelessWidget {
             CustomButton(
                 text: 'Manage Inventory',
                 icon: Icons.inventory,
-                onPressed: (){print('hello');}
+                onPressed: (){
+                  Navigator.pushNamed(context, '/company_menu');
+                }
             ),
             CustomButton(
                 text: 'Report Sales',

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoebusiness_manager/screens/auth_screens/login.dart';
+import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu.dart';
 import 'package:shoebusiness_manager/screens/main_menus/admin_main_menu.dart';
 import 'package:shoebusiness_manager/screens/main_menus/user_main_menu.dart';
 
@@ -21,6 +22,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      routes: {
+        '/main_menu':(context) =>AdminMainMenu(),
+        '/company_menu': (context) => CompanyMenu(),
+
+      },
+
       navigatorKey: navigatorKey,
       home: const Wrapper(),
       title: 'L.EvaristoShoeShop',
