@@ -6,6 +6,8 @@ import 'package:shoebusiness_manager/screens/auth_screens/login.dart';
 import 'package:shoebusiness_manager/screens/main_menus/admin_main_menu.dart';
 import 'package:shoebusiness_manager/screens/main_menus/user_main_menu.dart';
 
+
+//hello
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
