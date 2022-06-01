@@ -24,14 +24,14 @@ class CompanyMenu extends StatelessWidget {
                   text: 'L Evaristo',
                   icon: Icons.inventory,
                   onPressed: (){
-
+                    Navigator.pushNamed(context, '/inventory_menu');
                   }
               ),
               CustomButton(
                   text: 'Seacrest',
                   icon: Icons.receipt_long_rounded,
                   onPressed: (){
-
+                    Navigator.pushNamed(context, '/inventory_menu');
                   }
               ),
               CustomButton(
