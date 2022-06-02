@@ -31,7 +31,9 @@ class AdminMainMenu extends StatelessWidget {
             CustomButton(
                 text: 'Report Sales',
                 icon: Icons.point_of_sale,
-                onPressed: (){print('hello');}
+                onPressed: (){
+                  Navigator.pushNamed(context,'/report_sales');
+                }
             ),
             CustomButton(
                 text: 'Manage Orders',

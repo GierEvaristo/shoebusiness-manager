@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoebusiness_manager/screens/auth_screens/login.dart';
 import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu.dart';
-import 'package:shoebusiness_manager/screens/inventory_menu/inventory.dart';
 import 'package:shoebusiness_manager/screens/main_menus/admin_main_menu.dart';
+import 'package:shoebusiness_manager/screens/report_sales/report_sales.dart';
 
+import 'screens/inventory_menu/inventory.dart';
 
 
 //hello
@@ -27,7 +28,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/main_menu':(context) =>AdminMainMenu(),
         '/company_menu': (context) => CompanyMenu(),
+        '/report_sales': (context) => ReportSales(),
         '/inventory_menu': (context) => Inventory(),
+
       },
 
       navigatorKey: navigatorKey,
