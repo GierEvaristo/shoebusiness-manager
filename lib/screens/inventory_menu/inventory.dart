@@ -19,8 +19,13 @@ class _InventoryState extends State<Inventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child : Text('Edit',
+        style: TextStyle(color: Colors.white)),
+        onPressed: (){}
+      ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+        padding: EdgeInsets.fromLTRB(30, 80, 30, 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,11 +37,12 @@ class _InventoryState extends State<Inventory> {
               ),
               textDirection: TextDirection.ltr,
             ),
+            SizedBox(height: 20),
             Row(
               children: <Widget>[
                 Expanded(
                   child: SizedBox(
-                    child: TextField( // email
+                    child: TextField(
                       //controller: ,
                       //onChanged: (val){},
                       decoration: InputDecoration(
@@ -51,7 +57,6 @@ class _InventoryState extends State<Inventory> {
                 ),
                 IconButton(
                   onPressed: () {
-
                   },
                   icon:Icon(
                     Icons.search
@@ -59,12 +64,13 @@ class _InventoryState extends State<Inventory> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
             Expanded(
               child: SizedBox(
                 child: ListView.builder(
                   padding:  EdgeInsets.all(8),
                   itemCount: items.length + 1,
-                  itemBuilder: (conext, index){
+                  itemBuilder: (context, index){
                     if(index < items.length){
                       final item = items[index];
                       return ListTile(title: Text(item));
@@ -78,32 +84,55 @@ class _InventoryState extends State<Inventory> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ElevatedButton(
                   onPressed: () {
-
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Back',
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-
-                  },
-                  child: Text(
-                    'Edit',
-                  ),
-                ),
-
+                // ElevatedButton(
+                //   onPressed: () {
+                //   },
+                //   child: Text(
+                //     'Edit',
+                //   ),
+                // ),
               ],
-
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ItemCards extends StatelessWidget {
+  late Image image;
+  late String name;
+  late String color;
+  ItemCards({required this.image, required this.name, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Row(
+        children: [
+          image,
+          Column(
+            children: [
+              Text(name),
+              Text(color),
+              ElevatedButton(onPressed: (){}, child: Text('Edit'))
+            ]
+          )
+        ],
+      )
     );
   }
 }

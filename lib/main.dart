@@ -3,8 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoebusiness_manager/screens/auth_screens/login.dart';
+import 'package:shoebusiness_manager/screens/auth_screens/splash_screen.dart';
 import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu.dart';
 import 'package:shoebusiness_manager/screens/main_menus/admin_main_menu.dart';
+import 'package:shoebusiness_manager/screens/main_menus/user_main_menu.dart';
 import 'package:shoebusiness_manager/screens/report_sales/report_sales.dart';
 
 import 'screens/inventory_menu/inventory.dart';
@@ -26,7 +28,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
 
       routes: {
-        '/main_menu':(context) =>AdminMainMenu(),
+        '/admin_main_menu':(context) => AdminMainMenu(),
+        '/user_main_menu':(context) => UserMainMenu(),
         '/company_menu': (context) => CompanyMenu(),
         '/report_sales': (context) => ReportSales(),
         '/inventory_menu': (context) => Inventory(),
@@ -54,7 +57,7 @@ class Wrapper extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          return snapshot.hasData ? AdminMainMenu() : Login();
+          return snapshot.hasData ? SplashScreen() : Login();
         }
       )
     );

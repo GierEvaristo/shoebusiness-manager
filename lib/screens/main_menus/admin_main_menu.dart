@@ -48,7 +48,7 @@ class AdminMainMenu extends StatelessWidget {
             CustomButton(
                 text: 'Logout',
                 icon: Icons.logout,
-                onPressed: signOut
+                onPressed: (){signOut(context);}
             ),
           ],
         ),
@@ -56,8 +56,9 @@ class AdminMainMenu extends StatelessWidget {
     );
   }
 
-  Future signOut() async {
+  Future signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
+    Navigator.pop(context);
   }
 }
 

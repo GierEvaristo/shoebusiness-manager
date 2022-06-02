@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Welcome! Please Login User',
+              'Welcome! Please Login.',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold
@@ -95,18 +95,19 @@ class _LoginState extends State<Login> {
 
 
   void signIn() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) =>
-          Center(
-            child: CircularProgressIndicator()
-          )
-    );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (context) =>
+    //       Center(
+    //         child: CircularProgressIndicator()
+    //       )
+    // );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+
     } on FirebaseAuthException catch (e){
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -114,7 +115,7 @@ class _LoginState extends State<Login> {
         print('Wrong password provided for that user.');
       }
     }
-    navigatorKey.currentState!.popUntil((route)=>route.isFirst);
+    // navigatorKey.currentState!.popUntil((route)=>route.isFirst);
   }
 }
 
