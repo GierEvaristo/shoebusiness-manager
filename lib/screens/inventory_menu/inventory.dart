@@ -41,7 +41,6 @@ class _InventoryState extends State<Inventory> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) return Image.network(snapshot.data.toString());
                           else return Center(child: CircularProgressIndicator());
-
                         }
                       ),
                     ),
@@ -58,7 +57,9 @@ class _InventoryState extends State<Inventory> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  ElevatedButton(onPressed: (){}, child: Text('Edit')),
+                                  ElevatedButton(onPressed: (){
+                                    // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                  }, child: Text('Edit')),
                                 ],
                               )
                             ]
