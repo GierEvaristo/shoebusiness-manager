@@ -32,18 +32,22 @@ class AdminMainMenu extends StatelessWidget {
                 text: 'Report Sales',
                 icon: Icons.point_of_sale,
                 onPressed: (){
-                  Navigator.pushNamed(context,'/report_sales');
+                  Navigator.pushNamed(context,'/report_sales_menu');
                 }
             ),
             CustomButton(
                 text: 'Manage Orders',
                 icon: Icons.checklist_rounded,
-                onPressed: (){print('hello');}
+                onPressed: (){
+                  Navigator.pushNamed(context,'/manage_orders_menu');
+                }
             ),
             CustomButton(
                 text: 'Track Sales',
                 icon: Icons.receipt_long_rounded,
-                onPressed: (){print('hello');}
+                onPressed: (){
+                  Navigator.pushNamed(context,'/track_sales_menu');
+                }
             ),
             CustomButton(
                 text: 'Logout',
