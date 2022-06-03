@@ -34,21 +34,35 @@ class _InventoryState extends State<Inventory> {
               builder: (context, snapshot) {
                 return Row(
                   children: [
-                    Flexible(child: Image.asset('assets/openeye.png'), flex: 3),
+                    Flexible(
+                      flex: 3,
+                      child: FutureBuilder<String>(
+                        future: stock.generateURL(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) return Image.network(snapshot.data.toString());
+                          else return Center(child: CircularProgressIndicator());
+
+                        }
+                      ),
+                    ),
                     Flexible (
                       flex:6,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(stock.name),
-                            Text(stock.color),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton(onPressed: (){}, child: Text('Edit')),
-                              ],
-                            )
-                          ]
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(stock.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text(stock.color),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(onPressed: (){}, child: Text('Edit')),
+                                ],
+                              )
+                            ]
+                        ),
                       ),
                     )
                   ],
