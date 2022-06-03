@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoebusiness_manager/main.dart';
 
-class UserMainMenu extends StatelessWidget {
-  const UserMainMenu({Key? key}) : super(key: key);
+class ManageOrdersMenu extends StatelessWidget {
+  const ManageOrdersMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class UserMainMenu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Welcome Admin!',
+              Text('Choose Company',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold
@@ -22,23 +21,25 @@ class UserMainMenu extends StatelessWidget {
                 textDirection: TextDirection.ltr,
               ),
               CustomButton(
-                  text: 'Manage Inventory',
+                  text: 'L Evaristo',
                   icon: Icons.inventory,
                   onPressed: (){
-                    Navigator.pushNamed(context, '/company_menu');
+                    Navigator.pushNamed(context, '/report_sales');
                   }
               ),
               CustomButton(
-                  text: 'Report Sales',
-                  icon: Icons.point_of_sale,
+                  text: 'Seacrest',
+                  icon: Icons.receipt_long_rounded,
                   onPressed: (){
-                    Navigator.pushNamed(context,'/report_sales_menu');
+                    Navigator.pushNamed(context, '/report_sales');
                   }
               ),
               CustomButton(
-                  text: 'Logout',
+                  text: 'Back',
                   icon: Icons.logout,
-                  onPressed: (){signOut(context);}
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }
               ),
             ],
           ),
@@ -46,9 +47,8 @@ class UserMainMenu extends StatelessWidget {
     );
   }
 
-  Future signOut(BuildContext context) async {
+  Future signOut() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pop(context);
   }
 }
 

@@ -27,14 +27,13 @@ class _ReportSalesState extends State<ReportSales> {
                 textDirection: TextDirection.ltr,
                 ),
                 MyDropDown(title: 'Stock'),
-                MyDropDown(title: 'Color'),
                 MyDropDown(title: 'Size'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Flexible(
                       flex: 2,
-                      child: Text('Price sold',
+                      child: Text('Quantity',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20
@@ -54,8 +53,66 @@ class _ReportSalesState extends State<ReportSales> {
                       ),
                     )
                   ],
-                )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Text('Price Sold',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20
+                          )),
+                    ),
+                    Flexible(child: SizedBox(width: 20)),
+                    Flexible(
+                      flex:5,
+                      child: TextField( // email
+                        onChanged: (val){},
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20)
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Back'
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        onPrimary: Colors.white,
+                        minimumSize: Size(100, 40)
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: (){
 
+                      },
+                      child: Text(
+                          'Save'
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.amber,
+                          onPrimary: Colors.white,
+                          minimumSize: Size(100, 40)
+                      ),
+                    ),
+
+                  ],
+                ),
               ]
             ),
         ),
