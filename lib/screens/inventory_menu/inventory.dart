@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu.dart';
+import 'package:shoebusiness_manager/services/stock.dart';
 
 class Inventory extends StatefulWidget {
   const Inventory({Key? key}) : super(key: key);
@@ -11,15 +13,57 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
 
+  Stream<List<Stock>> readStocks(){
+    return FirebaseFirestore.instance.
+    collection('l_evaristo_inventory').
+    snapshots().
+    map((snapshot) => snapshot.docs.map((doc) => Stock.fromJson(doc.data())).toList());
+  }
+
   List<String> items = List.generate(
     15,
     (index) => 'Item ${index + 1}',
   );
 
+  Widget buildCard(Stock stock){
+    return Card(
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: StreamBuilder<List<Stock>>(
+              stream: readStocks(),
+              builder: (context, snapshot) {
+                return Row(
+                  children: [
+                    Flexible(child: Image.asset('assets/openeye.png'), flex: 3),
+                    Flexible (
+                      flex:6,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(stock.name),
+                            Text(stock.color),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(onPressed: (){}, child: Text('Edit')),
+                              ],
+                            )
+                          ]
+                      ),
+                    )
+                  ],
+                );
+              }
+          ),
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
         child : Text('Edit',
         style: TextStyle(color: Colors.white)),
         onPressed: (){}
@@ -67,21 +111,21 @@ class _InventoryState extends State<Inventory> {
             SizedBox(height: 10),
             Expanded(
               child: SizedBox(
-                child: ListView.builder(
-                  padding:  EdgeInsets.all(8),
-                  itemCount: items.length + 1,
-                  itemBuilder: (context, index){
-                    if(index < items.length){
-                      final item = items[index];
-                      return ListTile(title: Text(item));
-                    } else{
-                      return  Padding(
-                        padding:  EdgeInsets.symmetric(vertical: 32),
-                        child:(Center(child:CircularProgressIndicator())),
+                child: StreamBuilder<List<Stock>>(
+                  stream: readStocks(),
+                  builder: (context, snapshot){
+                    if (snapshot.hasData){
+                      print("snapshot has data xdddddddddddddddddddddddddddd");
+                      final stocks = snapshot.data!;
+                      return ListView(
+                        children: stocks.map(buildCard).toList(),
                       );
+                    } else {
+                      print("snapshot has NO data xdddddddddddddddddddddddddddd");
+                      return Center(child: CircularProgressIndicator());
                     }
-                  },
-                ),
+                  }
+                )
               ),
             ),
             SizedBox(height: 20),
@@ -113,25 +157,46 @@ class _InventoryState extends State<Inventory> {
 }
 
 class ItemCards extends StatelessWidget {
-  late Image image;
+  Image image = Image.asset('assets/openeye.png');
   late String name;
   late String color;
-  ItemCards({required this.image, required this.name, required this.color});
+
+  ItemCards(Stock stock){
+    name = stock.name;
+    color = stock.color;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
-        children: [
-          image,
-          Column(
-            children: [
-              Text(name),
-              Text(color),
-              ElevatedButton(onPressed: (){}, child: Text('Edit'))
-            ]
-          )
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: StreamBuilder<Object>(
+          stream: null,
+          builder: (context, snapshot) {
+            return Row(
+              children: [
+                Flexible(child: image, flex: 3),
+                Flexible(
+                  flex:6,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(name),
+                      Text(color),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(onPressed: (){}, child: Text('Edit')),
+                        ],
+                      )
+                    ]
+                  ),
+                )
+              ],
+            );
+          }
+        ),
       )
     );
   }
