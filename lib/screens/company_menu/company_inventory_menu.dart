@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../main_menus/admin_main_menu.dart';
 
 class CompanyMenu extends StatelessWidget {
   const CompanyMenu({Key? key}) : super(key: key);
@@ -20,16 +21,16 @@ class CompanyMenu extends StatelessWidget {
                 ),
                 textDirection: TextDirection.ltr,
               ),
-              CustomButton(
+              CustomButton2(
                   text: 'L Evaristo',
-                  icon: Icons.inventory,
+                  filename: 'l_evaristo_logo.png',
                   onPressed: (){
                     Navigator.pushNamed(context, '/inventory_menu');
                   }
               ),
-              CustomButton(
+              CustomButton2(
                   text: 'Seacrest',
-                  icon: Icons.receipt_long_rounded,
+                  filename: 'seacrest_logo.png',
                   onPressed: (){
                     Navigator.pushNamed(context, '/inventory_menu');
                   }
@@ -52,11 +53,13 @@ class CompanyMenu extends StatelessWidget {
   }
 }
 
-class CustomButton extends StatelessWidget {
+
+class CustomButton2 extends StatelessWidget {
   final String? text;
-  final IconData? icon;
+  final String filename;
   final void Function()? onPressed;
-  const CustomButton({required this.text, required this.icon, required this.onPressed});
+  const CustomButton2({required this.text,
+    required this.onPressed, required this.filename});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class CustomButton extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 20),
-          child: Icon(icon, size: 40),
+          child: Container(child: Image.asset('assets/$filename'), height: 45, width: 45,),
         ),
         ElevatedButton(
           onPressed: onPressed,
