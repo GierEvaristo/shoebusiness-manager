@@ -95,14 +95,15 @@ class _LoginState extends State<Login> {
 
 
   void signIn() async {
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (context) =>
-    //       Center(
-    //         child: CircularProgressIndicator()
-    //       )
-    // );
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          Center(
+            child: CircularProgressIndicator()
+          )
+    );
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
@@ -115,7 +116,7 @@ class _LoginState extends State<Login> {
         print('Wrong password provided for that user.');
       }
     }
-    // navigatorKey.currentState!.popUntil((route)=>route.isFirst);
+    navigatorKey.currentState!.popUntil((route)=>route.isFirst);
   }
 }
 
