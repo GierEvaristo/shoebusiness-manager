@@ -1,9 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/main.dart';
 
-class UserMainMenu extends StatelessWidget {
+class UserMainMenu extends StatefulWidget {
   const UserMainMenu({Key? key}) : super(key: key);
+
+  @override
+  State<UserMainMenu> createState() => _UserMainMenuState();
+}
+
+class _UserMainMenuState extends State<UserMainMenu> {
+
+  String username = '';
+
+  void initState(){
+    super.initState();
+    getName();
+  }
+
+  void getName() async{
+    User user = FirebaseAuth.instance.currentUser!;
+    final DocumentSnapshot snapshot =
+    await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
+
+    setState((){
+      username = snapshot['name'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +38,7 @@ class UserMainMenu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Welcome Admin!',
+              Text('Welcome $username!',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold
