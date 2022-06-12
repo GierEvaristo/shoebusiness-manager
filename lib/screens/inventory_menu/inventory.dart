@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
+import 'edit_stock.dart';
+
 class Inventory extends StatefulWidget {
   String chosenBrand;
   Inventory({Key? key, required this.chosenBrand}) : super(key: key);
@@ -74,6 +76,8 @@ class _InventoryState extends State<Inventory> {
                                     SizedBox(width: 10),
                                     ElevatedButton(
                                         onPressed: (){
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) => EditStock(currentStock: stock)));
                                           // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
                                         },
                                         child: Text('Edit/View'),
