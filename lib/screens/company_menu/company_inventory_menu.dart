@@ -22,7 +22,7 @@ class _CompanyMenuState extends State<CompanyMenu> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Choose Company',
+              Text('Choose Brand',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold
@@ -41,7 +41,6 @@ class _CompanyMenuState extends State<CompanyMenu> {
                         MaterialPageRoute(builder: (context) =>
                             Inventory(chosenBrand: 'l_evaristo'))
                     );
-                    Navigator.pushNamed(context, '/inventory_menu');
                   }
               ),
               CustomButton2(
