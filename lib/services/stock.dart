@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Stock {
+  late String docID;
   late String brand;
   late String name;
   late String color;
@@ -25,14 +26,16 @@ class Stock {
   }
 
 
-  Stock({required this.brand, required this.name, required this.color}) {
+  Stock({required this.brand, required this.name, required this.color, required this.docID}) {
   }
 
-  static Stock fromJson(Map<String,dynamic> json){
+  static Stock fromJson(Map<String,dynamic> json, String inputDocID){
+    print("DOC ID!!!!!!!!!!!!!!! YEAH $inputDocID");
     return Stock(
       brand: json['brand'],
       name: json['name'],
       color: json['color'],
+      docID: inputDocID
     );
   }
 }

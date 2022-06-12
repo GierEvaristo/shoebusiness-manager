@@ -12,7 +12,7 @@ class CompanyMenu extends StatefulWidget {
 }
 
 class _CompanyMenuState extends State<CompanyMenu> {
-  String chosen_brand = '';
+  String chosenBrand = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +34,12 @@ class _CompanyMenuState extends State<CompanyMenu> {
                   filename: 'l_evaristo_logo.png',
                   onPressed: (){
                     setState((){
-                      chosen_brand = 'l_evaristo';
+                      chosenBrand = 'l_evaristo';
                     });
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) =>
-                            Inventory(chosenBrand: 'l_evaristo'))
+                            Inventory(chosenBrand: chosenBrand))
                     );
                   }
               ),
@@ -48,12 +48,12 @@ class _CompanyMenuState extends State<CompanyMenu> {
                   filename: 'seacrest_logo.png',
                   onPressed: (){
                     setState((){
-                      chosen_brand = 'seacrest';
+                      chosenBrand = 'seacrest';
                     });
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) =>
-                      Inventory(chosenBrand: 'seacrest'))
+                      Inventory(chosenBrand: chosenBrand))
                     );
                   }
               ),
