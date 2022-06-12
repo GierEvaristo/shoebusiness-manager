@@ -1,10 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../inventory_menu/inventory.dart';
 import '../main_menus/admin_main_menu.dart';
 
-class CompanyMenu extends StatelessWidget {
+
+class CompanyMenu extends StatefulWidget {
   const CompanyMenu({Key? key}) : super(key: key);
 
+  @override
+  State<CompanyMenu> createState() => _CompanyMenuState();
+}
+
+class _CompanyMenuState extends State<CompanyMenu> {
+  String chosen_brand = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +33,14 @@ class CompanyMenu extends StatelessWidget {
                   text: 'L Evaristo',
                   filename: 'l_evaristo_logo.png',
                   onPressed: (){
+                    setState((){
+                      chosen_brand = 'l_evaristo';
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            Inventory(chosenBrand: 'l_evaristo'))
+                    );
                     Navigator.pushNamed(context, '/inventory_menu');
                   }
               ),
@@ -32,7 +48,14 @@ class CompanyMenu extends StatelessWidget {
                   text: 'Seacrest',
                   filename: 'seacrest_logo.png',
                   onPressed: (){
-                    Navigator.pushNamed(context, '/inventory_menu');
+                    setState((){
+                      chosen_brand = 'seacrest';
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                      Inventory(chosenBrand: 'seacrest'))
+                    );
                   }
               ),
               CustomButton(

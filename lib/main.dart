@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         '/user_main_menu':(context) => UserMainMenu(),
         '/company_menu': (context) => CompanyMenu(),
         '/report_sales': (context) => ReportSales(),
-        '/inventory_menu': (context) => Inventory(),
         '/report_sales_menu': (context) => ReportSalesMenu(),
         '/manage_orders_menu': (context) => ManageOrdersMenu(),
         '/track_sales_menu': (context) => TrackSalesMenu(),

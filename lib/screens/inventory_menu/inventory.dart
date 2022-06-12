@@ -5,8 +5,8 @@ import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu
 import 'package:shoebusiness_manager/services/stock.dart';
 
 class Inventory extends StatefulWidget {
-  const Inventory({Key? key}) : super(key: key);
-
+  String chosenBrand;
+  Inventory({Key? key, required this.chosenBrand}) : super(key: key);
   @override
   State<Inventory> createState() => _InventoryState();
 }
@@ -15,7 +15,7 @@ class _InventoryState extends State<Inventory> {
 
   Stream<List<Stock>> readStocks(){
     return FirebaseFirestore.instance.
-    collection('l_evaristo_inventory').
+    collection('${widget.chosenBrand}_inventory').
     snapshots().
     map((snapshot) => snapshot.docs.map((doc) => Stock.fromJson(doc.data())).toList());
   }
@@ -171,48 +171,51 @@ class _InventoryState extends State<Inventory> {
   }
 }
 
-class ItemCards extends StatelessWidget {
-  Image image = Image.asset('assets/openeye.png');
-  late String name;
-  late String color;
 
-  ItemCards(Stock stock){
-    name = stock.name;
-    color = stock.color;
-  }
+// LEGACY (can be removed if wished)
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return Row(
-              children: [
-                Flexible(child: image, flex: 3),
-                Flexible(
-                  flex:6,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(name),
-                      Text(color),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(onPressed: (){}, child: Text('Edit')),
-                        ],
-                      )
-                    ]
-                  ),
-                )
-              ],
-            );
-          }
-        ),
-      )
-    );
-  }
-}
+// class ItemCards extends StatelessWidget {
+//   Image image = Image.asset('assets/openeye.png');
+//   late String name;
+//   late String color;
+//
+//   ItemCards(Stock stock){
+//     name = stock.name;
+//     color = stock.color;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       child: Padding(
+//         padding: EdgeInsets.all(10.0),
+//         child: StreamBuilder<Object>(
+//           stream: null,
+//           builder: (context, snapshot) {
+//             return Row(
+//               children: [
+//                 Flexible(child: image, flex: 3),
+//                 Flexible(
+//                   flex:6,
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                     children: [
+//                       Text(name),
+//                       Text(color),
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.end,
+//                         children: [
+//                           ElevatedButton(onPressed: (){}, child: Text('Edit')),
+//                         ],
+//                       )
+//                     ]
+//                   ),
+//                 )
+//               ],
+//             );
+//           }
+//         ),
+//       )
+//     );
+//   }
+// }
