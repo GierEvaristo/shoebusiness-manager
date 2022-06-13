@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/screens/inventory_menu/view_stock.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
+import 'add_products.dart';
 import 'edit_stock.dart';
 
 class Inventory extends StatefulWidget {
@@ -114,8 +115,11 @@ class _InventoryState extends State<Inventory> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
-        child : Icon(Icons.edit, color: Colors.white),
-        onPressed: (){}
+        child : Icon(Icons.add, color: Colors.white),
+        onPressed: (){
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddProducts(chosenBrand: widget.chosenBrand)));
+        }
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(15, 80, 15, 40),

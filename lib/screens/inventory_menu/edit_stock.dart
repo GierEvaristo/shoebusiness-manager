@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
 class EditStock extends StatefulWidget {
@@ -228,9 +229,21 @@ class _EditStockState extends State<EditStock> {
           print('Controller index: $controllerIndex');
           await doc.update({'size_qty.${sizeRef[i]}' : int.parse(controllers[controllerIndex].text)});
         }
-        setState((){dataFuture = readStock();});
+        Fluttertoast.showToast(
+          msg: "Saved successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 16,
+          backgroundColor: Colors.grey[200],
+        );
         Navigator.of(context).pop();
-        Navigator.of(context).pop();
+        await Future.delayed(Duration(milliseconds: 500), (){
+          Navigator.of(context).pop();
+        });
+
+
+
+        
 
         // List<double> sizes = sizesToChange();
         // for (int i = 0; i<sizes.length; i++){
