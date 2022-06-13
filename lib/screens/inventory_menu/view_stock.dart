@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
-class EditStock extends StatefulWidget {
+class ViewStock extends StatefulWidget {
   Stock currentStock;
-  EditStock({Key? key, required this.currentStock}) : super(key: key);
+  ViewStock({Key? key, required this.currentStock}) : super(key: key);
 
   @override
-  State<EditStock> createState() => _EditStockState();
+  State<ViewStock> createState() => _ViewStockState();
 }
 
-class _EditStockState extends State<EditStock> {
+class _ViewStockState extends State<ViewStock> {
   late Future<Stock?> dataFuture;
   late String stockID;
   late String stockBrand;
@@ -42,49 +42,10 @@ class _EditStockState extends State<EditStock> {
 
   Widget buildCard(String size, int qty){
 
-    final controller = TextEditingController();
-    controller.text = qty.toString();
-    controllers.add(controller);
-    quantities.add(qty);
-
     return Card(
       child: ListTile(
         title: Text('Size: ${size}'),
-        trailing: Row (
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              splashRadius: 10,
-              icon: Icon(Icons.remove),
-              onPressed: (){
-                controller.text = (int.parse(controller.text) - 1).toString();
-              },
-            ),
-            Container(
-              width: 60,
-              child: TextField(
-                controller: controller,
-                keyboardType: TextInputType.number,
-                onChanged: (val){},
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: ('Qty.'),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 5)
-                ),
-              ),
-            ),
-            IconButton(
-              splashRadius: 10,
-              icon: Icon(Icons.add),
-              onPressed: (){
-                 controller.text = (int.parse(controller.text) + 1).toString();
-              },
-            )
-          ],
-        ),
+        trailing: Text('Quantity: $qty')
       ),
     );
   }
@@ -180,25 +141,8 @@ class _EditStockState extends State<EditStock> {
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    onPrimary: Colors.white
-                  ),
                   child: Text(
                     'Back',
-                  ),
-                ),
-                SizedBox(width: 50),
-                ElevatedButton(
-                  onPressed: (){
-                    showAlertDialog(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.amber,
-                      onPrimary: Colors.white
-                  ),
-                  child: Text(
-                    'Save',
                   ),
                 ),
               ],
@@ -209,52 +153,4 @@ class _EditStockState extends State<EditStock> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: Text("Cancel"),
-      onPressed:  () {Navigator.of(context).pop();},
-    );
-    Widget continueButton = TextButton(
-      child: Text("Continue"),
-      onPressed:  () async {
-        List<double> sizes = sizesToChange();
-        List<String> sizeRef = sizes.map((size) => size.toString().replaceAll('.', '')).toList();
-        final doc = FirebaseFirestore.instance.collection('${stockBrand}_inventory').doc(stockID);
-        for (int i = 0; i<sizes.length; i++){
-          print('size: ${sizes[i]}');
-          // fix
-          int controllerIndex = ((sizes[i] - 5)*2).toInt();
-          print('Controller index: $controllerIndex');
-          await doc.update({'size_qty.${sizeRef[i]}' : int.parse(controllers[controllerIndex].text)});
-        }
-        setState((){dataFuture = readStock();});
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-
-        // List<double> sizes = sizesToChange();
-        // for (int i = 0; i<sizes.length; i++){
-        //   widget.currentStock.size_qty[{sizes[i].toString()}]
-        //   print(sizes[i].toString());
-        // }
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Save changes"),
-      content: Text("Would you like to continue learning how to use Flutter alerts?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 }

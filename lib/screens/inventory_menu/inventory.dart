@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shoebusiness_manager/screens/inventory_menu/view_stock.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
 import 'edit_stock.dart';
@@ -70,23 +71,29 @@ class _InventoryState extends State<Inventory> {
                                       onPressed: (){
                                       // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
                                     },
-                                      child: Text('Remove'),
+                                      child: Text('Delete'),
                                       style: ElevatedButton.styleFrom(
                                           primary: Colors.red,
                                           onPrimary: Colors.white
                                       )),
                                     SizedBox(width: 10),
-                                    ElevatedButton(
+                                    IconButton(
+                                      onPressed: (){
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => ViewStock(currentStock: stock)));
+                                        // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                      },
+                                      icon: Icon(Icons.view_agenda),
+                                    ),
+                                    SizedBox(width: 10),
+                                    IconButton(
                                         onPressed: (){
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (context) => EditStock(currentStock: stock)));
                                           // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
                                         },
-                                        child: Text('Edit/View'),
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.green,
-                                            onPrimary: Colors.white
-                                        )),
+                                        icon: Icon(Icons.edit),
+                                        ),
                                   ],
                                 ),
                               )
