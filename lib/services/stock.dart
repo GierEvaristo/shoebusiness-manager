@@ -3,12 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Stock {
+  late String docID;
   late String brand;
   late String name;
   late String color;
   late Image image;
+<<<<<<< HEAD
   late var size_qty = Map<String, int>;
   late String address;
+=======
+  late Map<String, int> size_qty;
+>>>>>>> 07e6aae8eb11022ea07b52106d2253126b4b1215
 
   Future<String> generateURL() async {
     String temp_name = name.toLowerCase();
@@ -26,14 +31,33 @@ class Stock {
   }
 
 
-  Stock({required this.brand, required this.name, required this.color}) {
+  Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty}) {
   }
 
-  static Stock fromJson(Map<String,dynamic> json){
+  static Stock fromJson(Map<String,dynamic> json, String docID){
     return Stock(
       brand: json['brand'],
       name: json['name'],
       color: json['color'],
+      size_qty: {
+        '5.0': json['size_qty']['50'],
+        '5.5': json['size_qty']['55'],
+        '6.0': json['size_qty']['60'],
+        '6.5': json['size_qty']['65'],
+        '7.0': json['size_qty']['70'],
+        '7.5': json['size_qty']['75'],
+        '8.0': json['size_qty']['80'],
+        '8.5': json['size_qty']['85'],
+        '9.0': json['size_qty']['90'],
+        '9.5': json['size_qty']['95'],
+        '10.0': json['size_qty']['100'],
+        '10.5': json['size_qty']['105'],
+        '11.0': json['size_qty']['110'],
+        '11.5': json['size_qty']['115'],
+        '12.0': json['size_qty']['120'],
+      },
+      docID: docID
     );
   }
+
 }

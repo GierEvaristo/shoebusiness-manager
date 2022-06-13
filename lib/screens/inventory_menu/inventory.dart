@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu.dart';
+import 'package:shoebusiness_manager/screens/inventory_menu/view_stock.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
+
+import 'edit_stock.dart';
 
 class Inventory extends StatefulWidget {
   String chosenBrand;
@@ -17,7 +18,9 @@ class _InventoryState extends State<Inventory> {
     return FirebaseFirestore.instance.
     collection('${widget.chosenBrand}_inventory').
     snapshots().
-    map((snapshot) => snapshot.docs.map((doc) => Stock.fromJson(doc.data())).toList());
+    map((snapshot) => snapshot.docs.map((doc) {
+      return Stock.fromJson(doc.data(),doc.id);
+    }).toList());
   }
 
   List<String> items = List.generate(
@@ -27,21 +30,26 @@ class _InventoryState extends State<Inventory> {
 
   Widget buildCard(Stock stock){
     return Card(
+      color: Colors.white,
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: StreamBuilder<List<Stock>>(
               stream: readStocks(),
               builder: (context, snapshot) {
                 return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Flexible(
                       flex: 3,
-                      child: FutureBuilder<String>(
-                        future: stock.generateURL(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) return Image.network(snapshot.data.toString());
-                          else return Center(child: CircularProgressIndicator());
-                        }
+                      child: SizedBox(
+                        child: FutureBuilder<String>(
+                          future: stock.generateURL(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) return Container(width: 300,
+                                 child: Image.network(snapshot.data.toString()));
+                            else return Center(child: CircularProgressIndicator());
+                          }
+                        ),
                       ),
                     ),
                     Flexible (
@@ -49,18 +57,45 @@ class _InventoryState extends State<Inventory> {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(stock.name, style: TextStyle(fontWeight: FontWeight.bold)),
                               Text(stock.color),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  ElevatedButton(onPressed: (){
-                                    // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
-                                  }, child: Text('Edit')),
-                                ],
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    //wrap in future builder
+                                    ElevatedButton(
+                                      onPressed: (){
+                                      // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                    },
+                                      child: Text('Delete'),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.red,
+                                          onPrimary: Colors.white
+                                      )),
+                                    SizedBox(width: 10),
+                                    IconButton(
+                                      onPressed: (){
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => ViewStock(currentStock: stock)));
+                                        // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                      },
+                                      icon: Icon(Icons.view_agenda),
+                                    ),
+                                    SizedBox(width: 10),
+                                    IconButton(
+                                        onPressed: (){
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) => EditStock(currentStock: stock)));
+                                          // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                        },
+                                        icon: Icon(Icons.edit),
+                                        ),
+                                  ],
+                                ),
                               )
                             ]
                         ),
@@ -79,12 +114,11 @@ class _InventoryState extends State<Inventory> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
-        child : Text('Edit',
-        style: TextStyle(color: Colors.white)),
+        child : Icon(Icons.edit, color: Colors.white),
         onPressed: (){}
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(30, 80, 30, 40),
+        padding: EdgeInsets.fromLTRB(15, 80, 15, 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
