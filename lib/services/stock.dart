@@ -8,12 +8,8 @@ class Stock {
   late String name;
   late String color;
   late Image image;
-<<<<<<< HEAD
-  late var size_qty = Map<String, int>;
   late String address;
-=======
   late Map<String, int> size_qty;
->>>>>>> 07e6aae8eb11022ea07b52106d2253126b4b1215
 
   Future<String> generateURL() async {
     String temp_name = name.toLowerCase();
