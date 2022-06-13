@@ -63,7 +63,7 @@ class _AdminMainMenuState extends State<AdminMainMenu> {
                 text: 'Manage Orders',
                 icon: Icons.checklist_rounded,
                 onPressed: (){
-                  Navigator.pushNamed(context,'/manage_orders_menu');
+                  Navigator.pushNamed(context,'/manage_orders');
                 }
             ),
             CustomButton(
