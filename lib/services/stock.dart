@@ -8,7 +8,7 @@ class Stock {
   late String name;
   late String color;
   late Image image;
-  late var size_qty = Map<String, int>;
+  late Map<String, int> size_qty;
 
   Future<String> generateURL() async {
     String temp_name = name.toLowerCase();
@@ -26,16 +26,33 @@ class Stock {
   }
 
 
-  Stock({required this.brand, required this.name, required this.color, required this.docID}) {
+  Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty}) {
   }
 
-  static Stock fromJson(Map<String,dynamic> json, String inputDocID){
-    print("DOC ID!!!!!!!!!!!!!!! YEAH $inputDocID");
+  static Stock fromJson(Map<String,dynamic> json, String docID){
     return Stock(
       brand: json['brand'],
       name: json['name'],
       color: json['color'],
-      docID: inputDocID
+      size_qty: {
+        '5': json['size_qty']['5'],
+        '5.5': json['size_qty']['5.5'],
+        '6': json['size_qty']['6'],
+        '6.5': json['size_qty']['6.5'],
+        '7': json['size_qty']['7'],
+        '7.5': json['size_qty']['7.5'],
+        '8': json['size_qty']['8'],
+        '8.5': json['size_qty']['8.5'],
+        '9': json['size_qty']['9'],
+        '9.5': json['size_qty']['9.5'],
+        '10': json['size_qty']['10'],
+        '10.5': json['size_qty']['10.5'],
+        '11': json['size_qty']['11'],
+        '11.5': json['size_qty']['11.5'],
+        '12': json['size_qty']['12'],
+      },
+      docID: docID
     );
   }
+
 }

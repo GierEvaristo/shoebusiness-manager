@@ -17,7 +17,9 @@ class _InventoryState extends State<Inventory> {
     return FirebaseFirestore.instance.
     collection('${widget.chosenBrand}_inventory').
     snapshots().
-    map((snapshot) => snapshot.docs.map((doc) => Stock.fromJson(doc.data(),doc.id)).toList());
+    map((snapshot) => snapshot.docs.map((doc) {
+      return Stock.fromJson(doc.data(),doc.id);
+    }).toList());
   }
 
   List<String> items = List.generate(
