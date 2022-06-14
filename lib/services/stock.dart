@@ -7,19 +7,13 @@ class Stock {
   late String brand;
   late String name;
   late String color;
-  late Image image;
   late String address;
+  late String filename;
   late Map<String, int> size_qty;
 
   Future<String> generateURL() async {
-    String temp_name = name.toLowerCase();
-    String temp_color = color.toLowerCase();
-    temp_name = temp_name.replaceAll(' ', '_');
-    temp_name = temp_name.replaceAll('\'', '');
-    temp_color = temp_color.replaceAll(' ', '_');
-    String filename = temp_name + '_' +temp_color;
     print(filename + '---------------');
-    Reference ref = FirebaseStorage.instance.ref().child('images/${brand}/${filename}.jpg');
+    Reference ref = await FirebaseStorage.instance.ref().child('images/${brand}/${filename}');
     String url = (await ref.getDownloadURL()).toString();
     return url;
     // print(url + ' UUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
@@ -27,7 +21,14 @@ class Stock {
   }
 
 
-  Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty}) {
+  Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty
+  ,required this.filename}) {
+    // String temp_name = name.toLowerCase();
+    // String temp_color = color.toLowerCase();
+    // temp_name = temp_name.replaceAll(' ', '_');
+    // temp_name = temp_name.replaceAll('\'', '');
+    // temp_color = temp_color.replaceAll(' ', '_');
+    // filename = temp_name + '_' +temp_color;
   }
 
   static Stock fromJson(Map<String,dynamic> json, String docID){
@@ -35,6 +36,7 @@ class Stock {
       brand: json['brand'],
       name: json['name'],
       color: json['color'],
+      filename : json['filename'],
       size_qty: {
         '5.0': json['size_qty']['50'],
         '5.5': json['size_qty']['55'],
