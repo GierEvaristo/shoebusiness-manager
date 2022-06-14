@@ -244,13 +244,7 @@ class _InventoryState extends State<Inventory> {
                     'Back',
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //   },
-                //   child: Text(
-                //     'Edit',
-                //   ),
-                // ),
+
               ],
             ),
           ],
@@ -258,15 +252,6 @@ class _InventoryState extends State<Inventory> {
       ),
     );
   }
-
-  // void searchStock(String query){
-  //   final suggestions = allStocks.where((stock) {
-  //     String sample = stock.name.toLowerCase() + ' ' + stock.color.toLowerCase();
-  //     String input = query.toLowerCase();
-  //     return sample.contains(input);
-  //   }).toList();
-  //   setState(()=> stocks = suggestions);
-  // }
 
   showAlertDialogDelete(BuildContext context, Stock stock) {
     // set up the buttons
@@ -294,7 +279,7 @@ class _InventoryState extends State<Inventory> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Delete"),
-      content: Text("Are you sure you want to delete ${stock.name} : ${stock.color}?"),
+      content: Text("Are you sure you want to delete\n${stock.name} : ${stock.color} ?"),
       actions: [
         cancelButton,
         continueButton,
