@@ -23,12 +23,6 @@ class Stock {
 
   Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty
   ,required this.filename}) {
-    // String temp_name = name.toLowerCase();
-    // String temp_color = color.toLowerCase();
-    // temp_name = temp_name.replaceAll(' ', '_');
-    // temp_name = temp_name.replaceAll('\'', '');
-    // temp_color = temp_color.replaceAll(' ', '_');
-    // filename = temp_name + '_' +temp_color;
   }
 
   static Stock fromJson(Map<String,dynamic> json, String docID){

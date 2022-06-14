@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shoebusiness_manager/screens/inventory_menu/view_stock.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
@@ -14,6 +17,27 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+
+  late Future<bool> admin;
+
+  initState()  {
+    super.initState();
+    setState((){
+      admin = checkRole();
+    });
+  }
+
+  Future<void> deleteStockInDatabase(Stock stock) async {
+    FirebaseFirestore.instance.collection('${widget.chosenBrand}_inventory').doc(stock.docID).delete();
+    FirebaseStorage.instance.ref().child("images/${widget.chosenBrand}/${stock.filename}").delete();
+  }
+
+  Future<bool> checkRole() async{
+    User user = FirebaseAuth.instance.currentUser!;
+    final DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
+    return snapshot['admin']!;
+  }
 
   Stream<List<Stock>> readStocks(){
     return FirebaseFirestore.instance.
@@ -67,16 +91,24 @@ class _InventoryState extends State<Inventory> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    //wrap in future builder
-                                    ElevatedButton(
-                                      onPressed: (){
-                                      // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
-                                    },
-                                      child: Text('Delete'),
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.red,
-                                          onPrimary: Colors.white
-                                      )),
+                                    FutureBuilder<bool>(
+                                      future: admin,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData && snapshot.data == true){
+                                          return ElevatedButton(
+                                              onPressed: () {
+                                                showAlertDialogDelete(context, stock);
+                                              },
+                                              child: Text('Delete'),
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.red,
+                                                  onPrimary: Colors.white)
+                                          );
+                                        }
+                                        else return Container();
+                                      }
+                                    ),
+
                                     SizedBox(width: 10),
                                     IconButton(
                                       onPressed: (){
@@ -113,12 +145,20 @@ class _InventoryState extends State<Inventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(),
-        child : Icon(Icons.add, color: Colors.white),
-        onPressed: (){
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddProducts(chosenBrand: widget.chosenBrand)));
+      floatingActionButton: FutureBuilder<bool>(
+        future: checkRole(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData && snapshot.data == true){
+            return FloatingActionButton(
+                shape: CircleBorder(),
+                child : Icon(Icons.add, color: Colors.white),
+                onPressed: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddProducts(chosenBrand: widget.chosenBrand)));
+                }
+            );
+          }
+          else return Container();
         }
       ),
       body: Padding(
@@ -207,53 +247,46 @@ class _InventoryState extends State<Inventory> {
       ),
     );
   }
+
+  showAlertDialogDelete(BuildContext context, Stock stock) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes"),
+      onPressed:  () async {
+        await deleteStockInDatabase(stock);
+        Fluttertoast.showToast(
+          msg: "Deleted successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 16,
+          backgroundColor: Colors.grey[200],
+        );
+        Navigator.of(context).pop();
+        await Future.delayed(Duration(milliseconds: 500), (){
+          Navigator.of(context).pop();
+        });
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete"),
+      content: Text("Are you sure you want to delete ${stock.name} : ${stock.color}?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
-
-
-// LEGACY (can be removed if wished)
-
-// class ItemCards extends StatelessWidget {
-//   Image image = Image.asset('assets/openeye.png');
-//   late String name;
-//   late String color;
-//
-//   ItemCards(Stock stock){
-//     name = stock.name;
-//     color = stock.color;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: Padding(
-//         padding: EdgeInsets.all(10.0),
-//         child: StreamBuilder<Object>(
-//           stream: null,
-//           builder: (context, snapshot) {
-//             return Row(
-//               children: [
-//                 Flexible(child: image, flex: 3),
-//                 Flexible(
-//                   flex:6,
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       Text(name),
-//                       Text(color),
-//                       Row(
-//                         mainAxisAlignment: MainAxisAlignment.end,
-//                         children: [
-//                           ElevatedButton(onPressed: (){}, child: Text('Edit')),
-//                         ],
-//                       )
-//                     ]
-//                   ),
-//                 )
-//               ],
-//             );
-//           }
-//         ),
-//       )
-//     );
-//   }
-// }

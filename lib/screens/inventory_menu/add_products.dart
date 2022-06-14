@@ -1,15 +1,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:shoebusiness_manager/screens/company_menu/company_inventory_menu.dart';
-import 'package:shoebusiness_manager/services/stock.dart';
-import 'package:image/image.dart';
 import 'dart:io' as i;
 
 class AddProducts extends StatefulWidget {
@@ -68,7 +62,7 @@ class _AddProductsState extends State<AddProducts> {
         );
     setState(() {
       _image = image;
-      print(_image?.name);
+      text = 'Image added';
     });
   }
 

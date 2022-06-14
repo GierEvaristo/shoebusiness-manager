@@ -21,6 +21,7 @@ class _EditStockState extends State<EditStock> {
 
   @override
   initState() {
+    super.initState();
     stockID = widget.currentStock.docID;
     stockBrand = widget.currentStock.brand;
     dataFuture = readStock();
@@ -173,7 +174,6 @@ class _EditStockState extends State<EditStock> {
                 }
               }
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -192,7 +192,16 @@ class _EditStockState extends State<EditStock> {
                 SizedBox(width: 50),
                 ElevatedButton(
                   onPressed: (){
-                    showAlertDialog(context);
+                    if (sizesToChange().isEmpty){
+                      Fluttertoast.showToast(
+                        msg: "Nothing to save",
+                        toastLength: Toast.LENGTH_SHORT,
+                        textColor: Colors.black,
+                        fontSize: 16,
+                        backgroundColor: Colors.grey[200],
+                      );
+                    }
+                    else showAlertDialogEdit(context);
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Colors.amber,
@@ -210,8 +219,27 @@ class _EditStockState extends State<EditStock> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
+  String generateMessage(){
+    String displayText = 'Would you like to save changes?\n\n';
+    List<double> sizes = sizesToChange();
+    for (int i = 0; i<sizes.length; i++){
+      int controllerIndex = ((sizes[i] - 5)*2).toInt();
+      displayText += 'Size: ${sizes[i]} | Previous: ${widget.currentStock.size_qty['${sizes[i]}']} | New: ${controllers[controllerIndex].text}\n';
+    }
+    return displayText;
+  }
+
+  Future<void> updateStock() async{
+    List<double> sizes = sizesToChange();
+    List<String> sizeRef = sizes.map((size) => size.toString().replaceAll('.', '')).toList();
+    final doc = FirebaseFirestore.instance.collection('${stockBrand}_inventory').doc(stockID);
+    for (int i = 0; i<sizes.length; i++){
+      int controllerIndex = ((sizes[i] - 5)*2).toInt();
+      await doc.update({'size_qty.${sizeRef[i]}' : int.parse(controllers[controllerIndex].text)});
+    }
+  }
+
+  showAlertDialogEdit(BuildContext context) {
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {Navigator.of(context).pop();},
@@ -219,16 +247,7 @@ class _EditStockState extends State<EditStock> {
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed:  () async {
-        List<double> sizes = sizesToChange();
-        List<String> sizeRef = sizes.map((size) => size.toString().replaceAll('.', '')).toList();
-        final doc = FirebaseFirestore.instance.collection('${stockBrand}_inventory').doc(stockID);
-        for (int i = 0; i<sizes.length; i++){
-          print('size: ${sizes[i]}');
-          // fix
-          int controllerIndex = ((sizes[i] - 5)*2).toInt();
-          print('Controller index: $controllerIndex');
-          await doc.update({'size_qty.${sizeRef[i]}' : int.parse(controllers[controllerIndex].text)});
-        }
+        await updateStock();
         Fluttertoast.showToast(
           msg: "Saved successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -240,22 +259,12 @@ class _EditStockState extends State<EditStock> {
         await Future.delayed(Duration(milliseconds: 500), (){
           Navigator.of(context).pop();
         });
-
-
-
-        
-
-        // List<double> sizes = sizesToChange();
-        // for (int i = 0; i<sizes.length; i++){
-        //   widget.currentStock.size_qty[{sizes[i].toString()}]
-        //   print(sizes[i].toString());
-        // }
       },
     );
-    // set up the AlertDialog
+
     AlertDialog alert = AlertDialog(
       title: Text("Save changes"),
-      content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      content: Text(generateMessage()),
       actions: [
         cancelButton,
         continueButton,
