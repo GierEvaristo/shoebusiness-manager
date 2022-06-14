@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' as i;
 
+import '../../main.dart';
+
 class AddProducts extends StatefulWidget {
   String chosenBrand;
   AddProducts({required this.chosenBrand});
@@ -46,10 +48,19 @@ class _AddProductsState extends State<AddProducts> {
       '115' : 0,
       '120' : 0,
     };
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+        Center(
+          child: CircularProgressIndicator()
+        )
+    );
     stockData['size_qty'] = size_qtyData;
-    FirebaseFirestore.instance.collection('${widget.chosenBrand}_inventory').add(stockData).
+    await FirebaseStorage.instance.ref().child("images/${widget.chosenBrand}/${_image?.name}").putFile(i.File(_image!.path));
+    await FirebaseFirestore.instance.collection('${widget.chosenBrand}_inventory').add(stockData).
     then((documentSnapshot) => print("Added data with ID: ${documentSnapshot.id}"));
-    FirebaseStorage.instance.ref().child("images/${widget.chosenBrand}/${_image?.name}").putFile(i.File(_image!.path));
+    Navigator.pop(context);
   }
 
   Future<void> getImage() async {
@@ -167,6 +178,13 @@ class _AddProductsState extends State<AddProducts> {
                         );
                         Navigator.pop(context);
                       }
+                      else Fluttertoast.showToast(
+                        msg: "Please complete the fields",
+                        toastLength: Toast.LENGTH_SHORT,
+                        textColor: Colors.black,
+                        fontSize: 16,
+                        backgroundColor: Colors.grey[200],
+                      );
                     },
                     child: Text(
                         'Add'

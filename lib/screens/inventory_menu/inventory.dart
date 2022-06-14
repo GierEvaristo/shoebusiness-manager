@@ -47,8 +47,6 @@ class _InventoryState extends State<Inventory> {
     snapshots().
     map((snapshot) => snapshot.docs.map((doc) {
       var stock = Stock.fromJson(doc.data(),doc.id);
-      String sample = stock.name.toLowerCase() + ' ' + stock.color.toLowerCase();
-      String input = searchController.text.toLowerCase();
       return stock;
     }).toList());
   }
@@ -271,9 +269,6 @@ class _InventoryState extends State<Inventory> {
           backgroundColor: Colors.grey[200],
         );
         Navigator.of(context).pop();
-        await Future.delayed(Duration(milliseconds: 500), (){
-          Navigator.of(context).pop();
-        });
       },
     );
     // set up the AlertDialog
