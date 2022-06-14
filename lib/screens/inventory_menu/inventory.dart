@@ -19,6 +19,8 @@ class Inventory extends StatefulWidget {
 class _InventoryState extends State<Inventory> {
 
   late Future<bool> admin;
+  late List<Stock> allStocks = [];
+  TextEditingController searchController = TextEditingController();
 
   initState()  {
     super.initState();
@@ -44,7 +46,10 @@ class _InventoryState extends State<Inventory> {
     collection('${widget.chosenBrand}_inventory').
     snapshots().
     map((snapshot) => snapshot.docs.map((doc) {
-      return Stock.fromJson(doc.data(),doc.id);
+      var stock = Stock.fromJson(doc.data(),doc.id);
+      String sample = stock.name.toLowerCase() + ' ' + stock.color.toLowerCase();
+      String input = searchController.text.toLowerCase();
+      return stock;
     }).toList());
   }
 
@@ -180,8 +185,8 @@ class _InventoryState extends State<Inventory> {
                 Expanded(
                   child: SizedBox(
                     child: TextField(
-                      //controller: ,
-                      //onChanged: (val){},
+                      controller: searchController,
+                      onChanged: (val){setState((){});},
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -210,8 +215,14 @@ class _InventoryState extends State<Inventory> {
                     if (snapshot.hasData){
                       print("snapshot has data xdddddddddddddddddddddddddddd");
                       final stocks = snapshot.data!;
+                      List<Stock> filteredStocks = [];
+                      for (int i = 0; i< stocks.length; i++){
+                        String sample = stocks[i].name.toLowerCase() + ' ' + stocks[i].color.toLowerCase();
+                        String input = searchController.text.toLowerCase();
+                        if (sample.contains(input)) filteredStocks.add(stocks[i]);
+                      }
                       return ListView(
-                        children: stocks.map(buildCard).toList(),
+                        children: filteredStocks.map(buildCard).toList(),
                       );
                     } else {
                       print("snapshot has NO data xdddddddddddddddddddddddddddd");
@@ -247,6 +258,15 @@ class _InventoryState extends State<Inventory> {
       ),
     );
   }
+
+  // void searchStock(String query){
+  //   final suggestions = allStocks.where((stock) {
+  //     String sample = stock.name.toLowerCase() + ' ' + stock.color.toLowerCase();
+  //     String input = query.toLowerCase();
+  //     return sample.contains(input);
+  //   }).toList();
+  //   setState(()=> stocks = suggestions);
+  // }
 
   showAlertDialogDelete(BuildContext context, Stock stock) {
     // set up the buttons
