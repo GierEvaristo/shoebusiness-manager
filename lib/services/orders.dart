@@ -7,9 +7,7 @@ class Order {
   late String address;
   late String number;
 
-  Order(
-      {required this.name, required this.address, required this.number}) {
-  }
+  Order({required this.name, required this.address, required this.number});
 
   static Order fromJson(Map<String, dynamic> json) {
     return Order(

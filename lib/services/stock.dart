@@ -22,8 +22,7 @@ class Stock {
 
 
   Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty
-  ,required this.filename}) {
-  }
+  ,required this.filename});
 
   static Stock fromJson(Map<String,dynamic> json, String docID){
     return Stock(
