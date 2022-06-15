@@ -22,7 +22,7 @@ class Customer {
       status: json['completed'],
       date: json['date'],
       docID : docID,
-      orders : json['orders']
+      orders : json['orders'] as List<dynamic>
     );
   }
 }
