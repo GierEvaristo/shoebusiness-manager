@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/services/orders.dart';
+import 'package:intl/intl.dart';
+import 'dart:ui' as ui;
+
 
 class ManageOrders extends StatefulWidget {
   ManageOrders({Key? key}) : super(key: key);
@@ -43,6 +46,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                               Text(order.name, style: TextStyle(fontWeight: FontWeight.bold)),
                               Text(order.address),
                               Text(order.number),
+                              Text(DateFormat.yMMMd().add_jm().format(order.date.toDate())),
+                              Text(order.status.toString()),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -89,7 +94,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                   fontSize: 40,
                   fontWeight: FontWeight.bold
               ),
-              textDirection: TextDirection.ltr,
+              textDirection: ui.TextDirection.ltr,
             ),
             SizedBox(height: 20),
             Row(
