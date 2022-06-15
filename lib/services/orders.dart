@@ -21,7 +21,6 @@ class Order {
       number: json['contact number'],
       status: json['completed'],
       date: json['date'],
-
     );
   }
 }

@@ -19,7 +19,6 @@ class Inventory extends StatefulWidget {
 class _InventoryState extends State<Inventory> {
 
   late Future<bool> admin;
-  late List<Stock> allStocks = [];
   TextEditingController searchController = TextEditingController();
 
   initState()  {
@@ -46,8 +45,7 @@ class _InventoryState extends State<Inventory> {
     collection('${widget.chosenBrand}_inventory').
     snapshots().
     map((snapshot) => snapshot.docs.map((doc) {
-      var stock = Stock.fromJson(doc.data(),doc.id);
-      return stock;
+      return Stock.fromJson(doc.data(),doc.id);
     }).toList());
   }
 
@@ -87,10 +85,11 @@ class _InventoryState extends State<Inventory> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(stock.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                              Text(stock.color),
+                              Text('Model: ${stock.name.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text('Color: ${stock.color.toString()}'),
+                              Text('SRP: ${stock.srp.toString()}'),
                               Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
+                                margin: EdgeInsets.symmetric(vertical: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [

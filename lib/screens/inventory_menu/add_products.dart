@@ -18,9 +18,8 @@ class AddProducts extends StatefulWidget {
 class _AddProductsState extends State<AddProducts> {
   TextEditingController productNameController = TextEditingController();
   TextEditingController productColorController = TextEditingController();
+  TextEditingController productSRPController = TextEditingController();
   String text = 'Pick image';
-  String productName = '';
-  String productColor = '';
 
   late XFile? _image;
 
@@ -29,7 +28,8 @@ class _AddProductsState extends State<AddProducts> {
       'brand' : widget.chosenBrand,
       'name' : productNameController.text,
       'color' : productColorController.text,
-      'filename' : _image?.name
+      'filename' : _image?.name,
+      'srp' : int.parse(productSRPController.text),
     };
     Map<String, int> size_qtyData = {
       '50' : 0,
@@ -125,6 +125,27 @@ class _AddProductsState extends State<AddProducts> {
                   Expanded(
                     child: TextField(
                       controller: productColorController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20)
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('SRP',
+                      style: TextStyle(
+                          fontSize: 16
+                      )),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: TextField(
+                      controller: productSRPController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),

@@ -10,6 +10,7 @@ class Stock {
   late String address;
   late String filename;
   late Map<String, int> size_qty;
+  late int srp;
 
   Future<String> generateURL() async {
     print(filename + '---------------');
@@ -22,13 +23,14 @@ class Stock {
 
 
   Stock({required this.brand, required this.name, required this.color, required this.docID, required this.size_qty
-  ,required this.filename});
+  ,required this.filename, required this.srp});
 
   static Stock fromJson(Map<String,dynamic> json, String docID){
     return Stock(
       brand: json['brand'],
       name: json['name'],
       color: json['color'],
+      srp: json['srp'],
       filename : json['filename'],
       size_qty: {
         '5.0': json['size_qty']['50'],
