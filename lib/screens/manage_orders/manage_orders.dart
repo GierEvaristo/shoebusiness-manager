@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoebusiness_manager/services/orders.dart';
+import 'package:shoebusiness_manager/screens/manage_orders/view_orders.dart';
+import 'package:shoebusiness_manager/services/customer.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
@@ -14,11 +15,11 @@ class ManageOrders extends StatefulWidget {
 
 class _ManageOrdersState extends State<ManageOrders> {
 
-  Stream<List<Order>> readOrder(){
+  Stream<List<Customer>> readOrder(){
     return FirebaseFirestore.instance.
     collection('seacrest_orders').
     snapshots().
-    map((snapshot) => snapshot.docs.map((doc) => Order.fromJson(doc.data())).toList());
+    map((snapshot) => snapshot.docs.map((doc) => Customer.fromJson(doc.data(),doc.id)).toList());
   }
 
   List<String> items = List.generate(
@@ -26,11 +27,11 @@ class _ManageOrdersState extends State<ManageOrders> {
         (index) => 'Item ${index + 1}',
   );
 
-  Widget buildCard(Order order){
+  Widget buildCard(Customer customer){
     return Card(
         child: Padding(
           padding: EdgeInsets.all(10.0),
-          child: StreamBuilder<List<Order>>(
+          child: StreamBuilder<List<Customer>>(
               stream: readOrder(),
               builder: (context, snapshot) {
                 return Row(
@@ -43,11 +44,11 @@ class _ManageOrdersState extends State<ManageOrders> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(order.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                              Text(order.address),
-                              Text(order.number),
-                              Text(DateFormat.yMMMd().add_jm().format(order.date.toDate())),
-                              Text(order.status.toString()),
+                              Text(customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text(customer.address),
+                              Text(customer.number),
+                              Text(DateFormat.yMMMd().add_jm().format(customer.date.toDate())),
+                              Text(customer.status.toString()),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -58,6 +59,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                                     // ADD FUNCTION, REDIRECT TO EDIT ORDER SCREEN
                                   }, child: Text('Edit')),
                                   ElevatedButton(onPressed: (){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) => ViewOrders(currentCustomer: customer)));
                                     // ADD FUNCTION, REDIRECT TO VIEW ORDER SCREEN
                                   }, child: Text('View')),
                                 ],
@@ -126,14 +129,14 @@ class _ManageOrdersState extends State<ManageOrders> {
             SizedBox(height: 10),
             Expanded(
               child: SizedBox(
-                  child: StreamBuilder<List<Order>>(
+                  child: StreamBuilder<List<Customer>>(
                       stream: readOrder(),
                       builder: (context, snapshot){
                         if (snapshot.hasData){
                           print("snapshot has data xdddddddddddddddddddddddddddd");
-                          final orders = snapshot.data!;
+                          final customer = snapshot.data!;
                           return ListView(
-                            children: orders.map(buildCard).toList(),
+                            children: customer.map(buildCard).toList(),
                           );
                         } else {
                           print("snapshot has NO data xdddddddddddddddddddddddddddd");
