@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shoebusiness_manager/screens/report_sales/report_sales.dart';
 
 class ReportSalesMenu extends StatelessWidget {
   const ReportSalesMenu({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class ReportSalesMenu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Choose Company',
+              Text('Choose Brand',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold
@@ -24,14 +25,16 @@ class ReportSalesMenu extends StatelessWidget {
                   text: 'L Evaristo',
                   icon: Icons.inventory,
                   onPressed: (){
-                    Navigator.pushNamed(context, '/report_sales');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        ReportSales(chosenBrand: 'l_evaristo')));
                   }
               ),
               CustomButton(
                   text: 'Seacrest',
                   icon: Icons.receipt_long_rounded,
                   onPressed: (){
-                    Navigator.pushNamed(context, '/report_sales');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        ReportSales(chosenBrand: 'seacrest')));
                   }
               ),
               CustomButton(

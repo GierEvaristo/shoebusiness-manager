@@ -41,7 +41,7 @@ class _ViewOrdersState extends State<ViewOrders> {
             Customer? customer = snapshot.data;
             print(customer?.orders);
             print(customer?.orders[0]['size']);
-            //customer!.orders.forEach((element) {test+=element['color'];});
+            // customer!.orders.forEach((element) {test+=element['color'];});
             return Text(test);
           }
           else return Text('No data');
