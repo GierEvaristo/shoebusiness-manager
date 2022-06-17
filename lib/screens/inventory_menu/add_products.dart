@@ -21,7 +21,15 @@ class _AddProductsState extends State<AddProducts> {
   TextEditingController productSRPController = TextEditingController();
   String text = 'Pick image';
 
-  late XFile? _image;
+  late XFile? _image = null;
+  String chosenBrandProper = '';
+
+  @override
+  initState(){
+    super.initState();
+    if (widget.chosenBrand == 'l_evaristo') chosenBrandProper = 'L. Evaristo';
+    else chosenBrandProper = 'Seacrest';
+  }
 
   Future<void> uploadData() async {
     Map<String,dynamic> stockData = {
@@ -67,13 +75,15 @@ class _AddProductsState extends State<AddProducts> {
     final ImagePicker _picker = ImagePicker();
     final image = await _picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 50,
-        maxHeight: 120,
-        maxWidth: 120,
+        imageQuality: 100,
+        maxHeight: 300,
+        maxWidth: 300,
         );
     setState(() {
       _image = image;
-      text = 'Image added';
+      print(image);
+      if (_image != null)
+        text = 'Image added';
     });
   }
 
@@ -86,7 +96,7 @@ class _AddProductsState extends State<AddProducts> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Add ${widget.chosenBrand} product',
+              Text('Add ${chosenBrandProper} product',
                 style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold
