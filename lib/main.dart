@@ -11,6 +11,7 @@ import 'package:shoebusiness_manager/screens/manage_orders/manage_orders.dart';
 import 'package:shoebusiness_manager/screens/report_sales/report_sales.dart';
 import 'package:shoebusiness_manager/screens/report_sales/report_sales_menu.dart';
 import 'package:shoebusiness_manager/screens/track_sales/track_sales_menu.dart';
+import 'package:shoebusiness_manager/screens/track_sales/track_sales.dart';
 
 import 'screens/inventory_menu/inventory.dart';
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/report_sales_menu': (context) => ReportSalesMenu(),
         '/manage_orders' : (context) => ManageOrders(),
         '/track_sales_menu': (context) => TrackSalesMenu(),
+        '/track_sales': (context) => TrackSales(),
       },
 
       navigatorKey: navigatorKey,

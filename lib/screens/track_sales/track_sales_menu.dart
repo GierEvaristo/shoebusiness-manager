@@ -31,7 +31,7 @@ class TrackSalesMenu extends StatelessWidget {
                   text: 'Seacrest',
                   icon: Icons.receipt_long_rounded,
                   onPressed: (){
-                    Navigator.pushNamed(context, '/report_sales');
+                    Navigator.pushNamed(context, '/track_sales');
                   }
               ),
               CustomButton(
