@@ -131,19 +131,21 @@ class _ViewOrdersState extends State<ViewOrders> {
                     }
                   }
               ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Back',
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Back',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),

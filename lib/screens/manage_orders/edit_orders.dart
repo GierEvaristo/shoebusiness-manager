@@ -8,14 +8,14 @@ import '../../services/stock.dart';
 
 
 
-class ViewOrders extends StatefulWidget {
+class EditOrders extends StatefulWidget {
   late Customer currentCustomer;
-  ViewOrders({Key? key, required this.currentCustomer}) : super(key: key);
+  EditOrders({Key? key, required this.currentCustomer}) : super(key: key);
   @override
-  State<ViewOrders> createState() => _ViewOrdersState();
+  State<EditOrders> createState() => _EditOrdersState();
 }
 
-class _ViewOrdersState extends State<ViewOrders> {
+class _EditOrdersState extends State<EditOrders> {
   late String customerID;
   late Future<Customer?> dataFuture;
 
@@ -34,6 +34,11 @@ class _ViewOrdersState extends State<ViewOrders> {
       return Customer.fromJson(snapshot.data()!, customerID);
     }
   }
+
+  Future<void> deleteOrderInDatabase(Customer customer) async {
+    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.docID).delete();
+  }
+
 
   Widget buildCard(String model, String color, int size, int qty, int price){
 
@@ -55,10 +60,31 @@ class _ViewOrdersState extends State<ViewOrders> {
                         Text('Size: ${size}'),
                         Text('Quantity: ${qty}'),
                         Text('Price: ${price}'),
+                        Row(),
                       ]
                   ),
                 ),
-              )
+              ),
+              Flexible (
+                flex:10,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            ElevatedButton(onPressed: (
+
+                                ){
+                            }, child: Text('Delete')),
+                          ]
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         )
@@ -76,19 +102,8 @@ class _ViewOrdersState extends State<ViewOrders> {
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Column(
-              children: [
-                ListView(
-                  children: cardList,
-                ),
-              ],
-            ),
-            Column(
-
-            ),
-          ],
+        child: ListView(
+          children: cardList,
         ),
       ),
     );
@@ -97,6 +112,12 @@ class _ViewOrdersState extends State<ViewOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+            shape: CircleBorder(),
+            child : Text('Add',
+                style: TextStyle(color: Colors.white)),
+            onPressed: (){}
+        ),
         body: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -142,19 +163,21 @@ class _ViewOrdersState extends State<ViewOrders> {
                     }
                   }
               ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Back',
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Back',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),

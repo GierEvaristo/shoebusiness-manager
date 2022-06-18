@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shoebusiness_manager/screens/manage_orders/add_per_order.dart';
+import 'package:shoebusiness_manager/screens/manage_orders/edit_orders.dart';
 import 'package:shoebusiness_manager/screens/manage_orders/view_orders.dart';
 import 'package:shoebusiness_manager/services/customer.dart';
 import 'package:intl/intl.dart';
@@ -19,13 +22,21 @@ class _ManageOrdersState extends State<ManageOrders> {
     return FirebaseFirestore.instance.
     collection('seacrest_orders').
     snapshots().
-    map((snapshot) => snapshot.docs.map((doc) => Customer.fromJson(doc.data(),doc.id)).toList());
+    map((snapshot) => snapshot.docs.map((doc) {
+      return Customer.fromJson(doc.data(),doc.id);
+    }).toList());
   }
+
+  Future<void> deleteOrderInDatabase(Customer customer) async {
+    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.docID).delete();
+  }
+
 
   List<String> items = List.generate(
     15,
         (index) => 'Item ${index + 1}',
   );
+
 
   Widget buildCard(Customer customer){
     return Card(
@@ -53,16 +64,27 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   ElevatedButton(onPressed: (){
-                                    // ADD FUNCTION, TO DELETE
+                                    showAlertDialogDelete(context, customer);
+                                  }, child: Text('Delete')),
+                                  ElevatedButton(onPressed: (){
+
                                   }, child: Text('Dismiss')),
-                                  ElevatedButton(onPressed: (){
-                                    // ADD FUNCTION, REDIRECT TO EDIT ORDER SCREEN
-                                  }, child: Text('Edit')),
-                                  ElevatedButton(onPressed: (){
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) => ViewOrders(currentCustomer: customer)));
-                                    // ADD FUNCTION, REDIRECT TO VIEW ORDER SCREEN
-                                  }, child: Text('View')),
+                                  IconButton(
+                                    onPressed: (){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => EditOrders(currentCustomer: customer)));
+                                      // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                    },
+                                    icon: Icon(Icons.edit),
+                                  ),
+                                  IconButton(
+                                    onPressed: (){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => ViewOrders(currentCustomer: customer)));
+                                      // ADD FUNCTION, REDIRECT TO EDIT STOCK SCREEN
+                                    },
+                                    icon: Icon(Icons.view_agenda),
+                                  ),
                                 ],
                               )
                             ]
@@ -84,7 +106,10 @@ class _ManageOrdersState extends State<ManageOrders> {
           shape: CircleBorder(),
           child : Text('Add',
               style: TextStyle(color: Colors.white)),
-          onPressed: (){}
+          onPressed: (){
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddPerOrder(chosenBrand: 'seacrest')));
+          }
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30, 80, 30, 40),
@@ -170,6 +195,44 @@ class _ManageOrdersState extends State<ManageOrders> {
           ],
         ),
       ),
+    );
+  }
+  showAlertDialogDelete(BuildContext context, Customer customer) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes"),
+      onPressed:  () async {
+        await deleteOrderInDatabase(customer);
+        Fluttertoast.showToast(
+          msg: "Deleted successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 16,
+          backgroundColor: Colors.grey[200],
+        );
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete"),
+      content: Text("Are you sure you want to delete\n${customer.name}?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
