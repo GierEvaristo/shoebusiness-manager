@@ -54,7 +54,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 children: [
                                   ElevatedButton(onPressed: (){
                                     // ADD FUNCTION, TO DELETE
-                                  }, child: Text('Delete')),
+                                  }, child: Text('Dismiss')),
                                   ElevatedButton(onPressed: (){
                                     // ADD FUNCTION, REDIRECT TO EDIT ORDER SCREEN
                                   }, child: Text('Edit')),

@@ -30,7 +30,7 @@ class _CompanyMenuState extends State<CompanyMenu> {
                 textDirection: TextDirection.ltr,
               ),
               CustomButton2(
-                  text: 'L Evaristo',
+                  text: 'L. Evaristo',
                   filename: 'l_evaristo_logo.png',
                   onPressed: (){
                     setState((){

@@ -46,7 +46,7 @@ class _AdminMainMenuState extends State<AdminMainMenu> {
               textDirection: TextDirection.ltr,
             ),
             CustomButton(
-                text: 'Manage Inventory',
+                text: 'Manage Inventories',
                 icon: Icons.inventory,
                 onPressed: (){
                   Navigator.pushNamed(context, '/company_menu');
@@ -60,14 +60,14 @@ class _AdminMainMenuState extends State<AdminMainMenu> {
                 }
             ),
             CustomButton(
-                text: 'Manage Orders',
+                text: 'Manage Seacrest Orders',
                 icon: Icons.checklist_rounded,
                 onPressed: (){
                   Navigator.pushNamed(context,'/manage_orders');
                 }
             ),
             CustomButton(
-                text: 'Track Sales',
+                text: 'View Sales Report',
                 icon: Icons.receipt_long_rounded,
                 onPressed: (){
                   Navigator.pushNamed(context,'/track_sales_menu');

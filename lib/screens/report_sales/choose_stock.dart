@@ -72,6 +72,7 @@ class _ChooseStockState extends State<ChooseStock> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
+                                        Navigator.pop(context,stock.docID);
                                       },
                                       child: Text('Choose'),
                                       style: ElevatedButton.styleFrom(
@@ -102,7 +103,7 @@ class _ChooseStockState extends State<ChooseStock> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Manage Inventory',
+            Text('Choose Stock',
               style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold

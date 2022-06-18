@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/screens/report_sales/report_sales.dart';
 
+import '../main_menus/admin_main_menu.dart';
+
 class ReportSalesMenu extends StatelessWidget {
   const ReportSalesMenu({Key? key}) : super(key: key);
 
@@ -21,28 +23,29 @@ class ReportSalesMenu extends StatelessWidget {
                 ),
                 textDirection: TextDirection.ltr,
               ),
-              CustomButton(
-                  text: 'L Evaristo',
-                  icon: Icons.inventory,
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        ReportSales(chosenBrand: 'l_evaristo')));
-                  }
+              CustomButton2(
+                filename: 'l_evaristo_logo.png',
+                text: 'L. Evaristo',
+
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      ReportSales(chosenBrand: 'l_evaristo')));
+                }
+              ),
+              CustomButton2(
+                filename: 'seacrest_logo.png',
+                text: 'Seacrest',
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      ReportSales(chosenBrand: 'seacrest')));
+                }
               ),
               CustomButton(
-                  text: 'Seacrest',
-                  icon: Icons.receipt_long_rounded,
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        ReportSales(chosenBrand: 'seacrest')));
-                  }
-              ),
-              CustomButton(
-                  text: 'Back',
-                  icon: Icons.logout,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }
+                text: 'Back',
+                icon: Icons.logout,
+                onPressed: () {
+                  Navigator.pop(context);
+                }
               ),
             ],
           ),
@@ -55,11 +58,12 @@ class ReportSalesMenu extends StatelessWidget {
   }
 }
 
-class CustomButton extends StatelessWidget {
+class CustomButton2 extends StatelessWidget {
   final String? text;
-  final IconData? icon;
+  final String filename;
   final void Function()? onPressed;
-  const CustomButton({required this.text, required this.icon, required this.onPressed});
+  const CustomButton2({required this.text,
+    required this.onPressed, required this.filename});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,7 @@ class CustomButton extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 20),
-          child: Icon(icon, size: 40),
+          child: Container(child: Image.asset('assets/$filename'), height: 45, width: 45,),
         ),
         ElevatedButton(
           onPressed: onPressed,

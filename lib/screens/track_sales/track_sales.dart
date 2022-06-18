@@ -7,14 +7,15 @@ import 'package:shoebusiness_manager/services/sales.dart';
 import 'dart:ui' as ui;
 
 class TrackSales extends StatefulWidget{
-  TrackSales({Key? key}): super(key: key);
+  String chosenBrand;
+  TrackSales({required this.chosenBrand});
   @override
   State<TrackSales> createState() => _TrackSalesState();
 }
 
 class _TrackSalesState extends State<TrackSales>{
   Stream<List<Sales>> readSales(){
-    return FirebaseFirestore.instance.collection('seacrest_sales').snapshots().
+    return FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').snapshots().
     map((snapshot) =>
         snapshot.docs.map((doc) => Sales.fromJson(doc.data(), doc.id)).toList());
   }

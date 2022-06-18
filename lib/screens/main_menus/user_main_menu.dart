@@ -46,7 +46,7 @@ class _UserMainMenuState extends State<UserMainMenu> {
                 textDirection: TextDirection.ltr,
               ),
               CustomButton(
-                  text: 'Manage Inventory',
+                  text: 'Manage Inventories',
                   icon: Icons.inventory,
                   onPressed: (){
                     Navigator.pushNamed(context, '/company_menu');

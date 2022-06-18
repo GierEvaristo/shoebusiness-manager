@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shoebusiness_manager/screens/report_sales/choose_stock.dart';
+
+import '../../services/stock.dart';
 
 
 class ReportSales extends StatefulWidget {
@@ -14,15 +19,50 @@ class _ReportSalesState extends State<ReportSales> {
   List<String> sizes = [];
   String? chosenSize;
   String chosenBrandProper = '';
+  String itemName = 'Choose';
+  String? docID;
+  TextEditingController priceSoldController = TextEditingController();
+  TextEditingController qtyController = TextEditingController();
 
   @override
   initState(){
     super.initState();
-    for (double i = 5.0; i<=12.0; i++){
+    for (double i = 5.0; i<=12.0; i+=0.5){
       sizes.add(i.toString());
     }
     if (widget.chosenBrand == 'l_evaristo') chosenBrandProper = 'L. Evaristo';
     else chosenBrandProper = 'Seacrest';
+  }
+
+  Future<void> uploadData() async {
+    Map<String,dynamic> salesData = {
+      'brand' : widget.chosenBrand,
+      'price_sold' : int.parse(priceSoldController.text),
+      'qty' : int.parse(qtyController.text),
+      'size' : chosenSize!.replaceAll('.', ''),
+      'stock_docID' : docID,
+      'time_date' : FieldValue.serverTimestamp()
+    };
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) =>
+            Center(
+                child: CircularProgressIndicator()
+            )
+    );
+    await FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').add(salesData).
+    then((documentSnapshot) => print("Reported sales with ID: ${documentSnapshot.id}"));
+
+
+    Fluttertoast.showToast(
+      msg: "Reported successfully and stock deducted in inventory",
+      toastLength: Toast.LENGTH_SHORT,
+      textColor: Colors.black,
+      fontSize: 16,
+      backgroundColor: Colors.grey[200],
+    );
+    Navigator.pop(context);
   }
 
   DropdownMenuItem<String> buildMenuItem(String item){
@@ -45,7 +85,6 @@ class _ReportSalesState extends State<ReportSales> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold
                   ),
-                textDirection: TextDirection.ltr,
                 ),
                 Row(
                   children: [
@@ -60,12 +99,22 @@ class _ReportSalesState extends State<ReportSales> {
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        onPressed: () async {
+                          String? chosenStockID = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
                               ChooseStock(chosenBrand: widget.chosenBrand)));
+                          if (chosenStockID != null){
+                            Map<String,dynamic> stock = await
+                            FirebaseFirestore.instance.collection('${widget.chosenBrand}_inventory').
+                            doc(chosenStockID).get().then((snapshot) => snapshot.data()!);
+                            setState((){
+                              docID = chosenStockID;
+                              itemName = '${stock['name']} - ${stock['color']}';
+                            });
+                          }
+
                         },
                         child: Text(
-                          'text!',
+                          '$itemName',
                           textScaleFactor: 1.3,
                         ),
                         style: ElevatedButton.styleFrom(
@@ -127,6 +176,7 @@ class _ReportSalesState extends State<ReportSales> {
                     ),
                     Expanded(
                       child: TextField(
+                        controller: qtyController,
                         onChanged: (val){},
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -152,6 +202,7 @@ class _ReportSalesState extends State<ReportSales> {
                     ),
                     Expanded(
                       child: TextField(
+                        controller: priceSoldController,
                         onChanged: (val){},
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -183,7 +234,18 @@ class _ReportSalesState extends State<ReportSales> {
                     ),
                     ElevatedButton(
                       onPressed: (){
-
+                        if (docID != null && chosenSize != null && qtyController.text != '' && priceSoldController.text != ''){
+                          uploadData();
+                        }
+                        else {
+                          Fluttertoast.showToast(
+                            msg: "Please complete the fields",
+                            toastLength: Toast.LENGTH_SHORT,
+                            textColor: Colors.black,
+                            fontSize: 16,
+                            backgroundColor: Colors.grey[200],
+                          );
+                        }
                       },
                       child: Text(
                           'Report'
