@@ -8,11 +8,9 @@ class Sales {
   late String size;
   late String stockDocID;
   late Timestamp timeDate;
-  late String stockName;
 
   Sales({required this.priceSold, required this.qty, required this.size,
   required this.stockDocID, required this.timeDate});
-
 
   static Sales fromJson(Map<String, dynamic> json, String docID) {
 
