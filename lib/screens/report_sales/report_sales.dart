@@ -35,11 +35,12 @@ class _ReportSalesState extends State<ReportSales> {
   }
 
   Future<void> uploadData() async {
+    String uploadSize = chosenSize!.replaceAll('.', '');
     Map<String,dynamic> salesData = {
       'brand' : widget.chosenBrand,
       'price_sold' : int.parse(priceSoldController.text),
       'qty' : int.parse(qtyController.text),
-      'size' : chosenSize!.replaceAll('.', ''),
+      'size' : uploadSize,
       'stock_docID' : docID,
       'time_date' : FieldValue.serverTimestamp()
     };
@@ -54,6 +55,13 @@ class _ReportSalesState extends State<ReportSales> {
     await FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').add(salesData).
     then((documentSnapshot) => print("Reported sales with ID: ${documentSnapshot.id}"));
 
+    final doc = FirebaseFirestore.instance.collection('${widget.chosenBrand}_inventory').doc(docID);
+    Map<String,dynamic> stock = await doc.get().then((snapshot) => snapshot.data()!);
+    print(stock);
+    print(uploadSize);
+    int qtyForSize = stock['size_qty']['$uploadSize'] as int;
+    int newQty = qtyForSize - int.parse(qtyController.text);
+    await doc.update({'size_qty.${uploadSize}' : newQty});
 
     Fluttertoast.showToast(
       msg: "Reported successfully and stock deducted in inventory",
@@ -78,6 +86,7 @@ class _ReportSalesState extends State<ReportSales> {
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text('Report ${chosenBrandProper} Sales',

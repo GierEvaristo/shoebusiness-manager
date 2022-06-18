@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shoebusiness_manager/screens/track_sales/track_sales.dart';
 import 'package:shoebusiness_manager/services/sales.dart';
@@ -14,10 +15,44 @@ class TrackSales extends StatefulWidget{
 }
 
 class _TrackSalesState extends State<TrackSales>{
+
+  late String chosenBrandProper;
+
+  @override
+  initState(){
+    super.initState();
+    if (widget.chosenBrand == 'l_evaristo') chosenBrandProper = 'L. Evaristo';
+    else chosenBrandProper = 'Seacrest';
+  }
+
   Stream<List<Sales>> readSales(){
     return FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').snapshots().
     map((snapshot) =>
         snapshot.docs.map((doc) => Sales.fromJson(doc.data(), doc.id)).toList());
+  }
+
+  String convertToProperSize(String size){
+    if (size == '50') return '5.0';
+    else if (size == '55') return '5.5';
+    else if (size == '60') return '6.0';
+    else if (size == '65') return '6.5';
+    else if (size == '70') return '7.0';
+    else if (size == '75') return '7.5';
+    else if (size == '80') return '8.0';
+    else if (size == '85') return '8.5';
+    else if (size == '90') return '9.0';
+    else if (size == '95') return '9.5';
+    else if (size == '100') return '10.0';
+    else if (size == '105') return '10.5';
+    else if (size == '110') return '11.0';
+    else if (size == '115') return '11.5';
+    else return '12.0';
+  }
+
+  Future<String?> generateStockName(Sales sale) async{
+    Map<String, dynamic> stock = await FirebaseFirestore.instance.collection('${widget.chosenBrand}_inventory')
+        .doc(sale.stockDocID).get().then((snapshot) => snapshot.data()!);
+    return ('${stock['name'] as String} - ${stock['color'] as String}');
   }
 
   List<String> items = List.generate(15, (index) => 'Item ${index + 1}');
@@ -39,10 +74,20 @@ class _TrackSalesState extends State<TrackSales>{
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(sale.stockDocID, style: TextStyle(fontWeight: FontWeight.bold)),
+                        FutureBuilder<String?>(
+                          future: generateStockName(sale),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData){
+                              return Text(snapshot.data!, style: TextStyle(fontWeight: FontWeight.bold));
+                            }
+                            else {
+                              return Text('...', style: TextStyle(fontWeight: FontWeight.bold));
+                            }
+                          }
+                        ),
                         Text("Price Sold: ${sale.priceSold}"),
-                        Text("Quantity: $sale.qty.toString()"),
-                        Text("Size: ${sale.size}"),
+                        Text("Quantity: ${sale.qty.toString()}"),
+                        Text("Size: ${convertToProperSize(sale.size)}"),
                         Text(DateFormat.yMMMd().add_jm().format(sale.timeDate.toDate()))
                       ]
                     )
@@ -66,11 +111,10 @@ class _TrackSalesState extends State<TrackSales>{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Track Sales', style: TextStyle(
-              fontSize: 40, fontWeight: FontWeight.bold),
+            Text('View ${chosenBrandProper} Sales', style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.bold),
             textDirection: ui.TextDirection.ltr,
             ),
-          SizedBox(height: 20),
           Expanded(
             child: SizedBox(
               child: StreamBuilder<List<Sales>>(
@@ -92,19 +136,78 @@ class _TrackSalesState extends State<TrackSales>{
           ),
           SizedBox(height:20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Text('Back'),
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.amber,
+                      onPrimary: Colors.white
+                  ),
+                  child: Text(
+                    'Back',
+                  )
+              ),
+              SizedBox(width: 20),
+              ElevatedButton(
+                  onPressed: (){
+                    showAlertDialogExcel(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white
+                  ),
+                  child: Text(
+                    'Generate monthly report (Excel)',
+                  )
               )
             ]
           ),
           ],
         ),
       ),
+    );
+  }
+
+  showAlertDialogExcel(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed:  () async {
+        Fluttertoast.showToast(
+          msg: "Saved successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 16,
+          backgroundColor: Colors.grey[200],
+        );
+        Navigator.of(context).pop();
+        await Future.delayed(Duration(milliseconds: 500), (){
+          Navigator.of(context).pop();
+        });
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Select month"),
+      content: Text('Date'),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

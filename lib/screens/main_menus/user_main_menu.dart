@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoebusiness_manager/main.dart';
 
+import '../report_sales/report_sales.dart';
+
 class UserMainMenu extends StatefulWidget {
   const UserMainMenu({Key? key}) : super(key: key);
 
@@ -53,10 +55,11 @@ class _UserMainMenuState extends State<UserMainMenu> {
                   }
               ),
               CustomButton(
-                  text: 'Report Sales',
+                  text: 'Report L. Evaristo Sales',
                   icon: Icons.point_of_sale,
                   onPressed: (){
-                    Navigator.pushNamed(context,'/report_sales_menu');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        ReportSales(chosenBrand: 'l_evaristo')));
                   }
               ),
               CustomButton(
