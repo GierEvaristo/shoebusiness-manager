@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:image/image.dart';
 import '../../services/customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shoebusiness_manager/screens/inventory_menu/inventory.dart';
+
+import '../../services/stock.dart';
+
 
 
 class ViewOrders extends StatefulWidget {
@@ -13,11 +18,15 @@ class ViewOrders extends StatefulWidget {
 class _ViewOrdersState extends State<ViewOrders> {
   late String customerID;
   late Future<Customer?> dataFuture;
+  late String stockID;
+  late List<dynamic> list_order;
 
   @override
   initState(){
     super.initState();
     customerID = widget.currentCustomer.docID;
+    list_order = widget.currentCustomer.orders;
+    print(list_order);
     dataFuture= readCustomer();
   }
 
@@ -29,24 +38,119 @@ class _ViewOrdersState extends State<ViewOrders> {
     }
   }
 
+  Widget buildCard(String model, String color, int size, int qty, int price){
+
+    return Card(
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              Flexible (
+                flex:10,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Model: ${model}', style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text('Color: ${color}'),
+                        Text('Size: ${size}'),
+                        Text('Quantity: ${qty}'),
+                        Text('Price: ${price}'),
+                      ]
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+    );
+  }
+  Widget buildBody(Customer customer){
+    List<Widget> cardList = [];
+    customer.orders.forEach((element) {
+      cardList.add(buildCard( element['model'], element['color'],element['size'], element['qty'], element['price_sold']));
+    });
+
+    for (int i = 0 ; i<cardList.length; i++){
+      print(cardList);
+    }
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: ListView(
+          children: cardList,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: FutureBuilder<Customer?>(
-        future: dataFuture,
-        builder: (context, snapshot){
-          if (snapshot.hasData){
-            String test = '';
-            Customer? customer = snapshot.data;
-            print(customer?.orders);
-            print(customer?.orders[0]['size']);
-            // customer!.orders.forEach((element) {test+=element['color'];});
-            return Text(test);
-          }
-          else return Text('No data');
-        }
-      ),
+        body: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FutureBuilder<dynamic>(
+                  future: dataFuture,
+                  builder: (context,snapshot) {
+                    if (snapshot.hasData) {
+                      Customer? customer = snapshot.data;
+                      return Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            height: 150,
+                            child: Column (
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Name: ${customer!.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  Text('Address: ${customer.address}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  Text('Contact Number: ${customer.number}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                ]
+                            ),
+                          )
+                        ],
+                      );
+                    } else {
+                      return Center(child: Container(margin: EdgeInsets.all(50),child: CircularProgressIndicator()));
+                    }
+                  }
+              ),
+
+              FutureBuilder<Customer?>(
+                  future: dataFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData){
+                      final customer_orders = snapshot.data;
+                      return customer_orders == null ? Center(child: CircularProgressIndicator()) : buildBody(customer_orders);
+                    }
+                    else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Back',
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
     );
   }
 }
