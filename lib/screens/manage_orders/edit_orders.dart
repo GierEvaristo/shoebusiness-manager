@@ -76,8 +76,19 @@ class _ViewOrdersState extends State<ViewOrders> {
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(10),
-        child: ListView(
-          children: cardList,
+        child: Row(
+          children: [
+            Column(
+              children: [
+                ListView(
+                  children: cardList,
+                ),
+              ],
+            ),
+            Column(
+
+            ),
+          ],
         ),
       ),
     );
