@@ -44,11 +44,11 @@ class _ManageOrdersState extends State<ManageOrders> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                              Text(customer.address),
-                              Text(customer.number),
-                              Text(DateFormat.yMMMd().add_jm().format(customer.date.toDate())),
-                              Text(customer.status.toString()),
+                              Text('Name: ${customer.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text('Address: ${customer.address}'),
+                              Text('Contact Number: ${customer.number}'),
+                              Text('Date: ${DateFormat.yMMMd().add_jm().format(customer.date.toDate())}'),
+                              Text('Completed: ${customer.status.toString()}'),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
