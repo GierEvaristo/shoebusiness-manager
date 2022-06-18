@@ -3,10 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shoebusiness_manager/screens/track_sales/generate_excel.dart';
 import 'package:shoebusiness_manager/screens/track_sales/track_sales.dart';
 import 'package:shoebusiness_manager/services/sales.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row, Column, Alignment;
-import 'package:month_year_picker/month_year_picker.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'dart:ui' as ui;
 
 class TrackSales extends StatefulWidget{
@@ -19,6 +20,10 @@ class TrackSales extends StatefulWidget{
 class _TrackSalesState extends State<TrackSales>{
 
   late String chosenBrandProper;
+  late DateTime? start;
+  late DateTime? end;
+  late String startDate = 'From';
+  late String endDate = 'Until';
 
   @override
   initState(){
@@ -28,10 +33,16 @@ class _TrackSalesState extends State<TrackSales>{
   }
 
   Stream<List<Sales>> readSales(){
-    return FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').snapshots().
+    return FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').orderBy('time_date', descending: true).snapshots().
     map((snapshot) =>
         snapshot.docs.map((doc) => Sales.fromJson(doc.data(), doc.id)).toList());
   }
+  //DateFormat.yMMMd().add_jm().format(sale.timeDate.toDate())
+
+  // Future<List<Sales>> getSalesByDate(){
+  //   DateFormat.YEAR_MONTH
+  //   return FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').where('time_date', )
+  // }
 
   String convertToProperSize(String size){
     if (size == '50') return '5.0';
@@ -156,7 +167,8 @@ class _TrackSalesState extends State<TrackSales>{
               SizedBox(width: 20),
               ElevatedButton(
                   onPressed: (){
-                    showAlertDialogExcel(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        GenerateExcel(chosenBrand: widget.chosenBrand,)));
                   },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
@@ -164,7 +176,7 @@ class _TrackSalesState extends State<TrackSales>{
                     onPrimary: Colors.white
                   ),
                   child: Text(
-                    'Generate monthly report (Excel)',
+                    'Generate Excel',
                   )
               )
             ]
@@ -198,17 +210,46 @@ class _TrackSalesState extends State<TrackSales>{
     );
 
     AlertDialog alert = AlertDialog(
-      title: Text("Select month"),
-      content: ElevatedButton(
-        child: Text('Select'),
-        onPressed: () async{
-          final selected = await showMonthYearPicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2022),
-            lastDate: DateTime(2023),
-          );
-        },
+      title: Text("Select date range"),
+      content: Container(
+        height:150,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: Text(startDate),
+              onPressed: () async {
+                final from = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+                  firstDate: DateTime(DateTime.now().year, 5),
+                  lastDate: DateTime(DateTime.now().year + 1, 9),
+                );
+                print(from);
+                start = from;
+                setState((){
+                  startDate = DateFormat.yMMMMd().format(start!);
+                  print(startDate);
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text('Until'),
+              onPressed: () async{
+                final until = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+                  firstDate: DateTime(DateTime.now().year, 5),
+                  lastDate: DateTime(DateTime.now().year + 1, 9),
+                );
+                setState((){
+                  end = until;
+                });
+              },
+            ),
+          ],
+        ),
       ),
       actions: [
         cancelButton,

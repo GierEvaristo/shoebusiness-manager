@@ -7,7 +7,7 @@ class Sales {
   late int qty;
   late String size;
   late String stockDocID;
-  late dynamic timeDate;
+  late Timestamp timeDate;
   late String stockName;
 
   Sales({required this.priceSold, required this.qty, required this.size,
