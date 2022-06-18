@@ -12,6 +12,8 @@ import 'package:shoebusiness_manager/screens/report_sales/report_sales.dart';
 import 'package:shoebusiness_manager/screens/report_sales/report_sales_menu.dart';
 import 'package:shoebusiness_manager/screens/track_sales/track_sales_menu.dart';
 import 'package:shoebusiness_manager/screens/track_sales/track_sales.dart';
+import 'package:month_year_picker/month_year_picker.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'screens/inventory_menu/inventory.dart';
 
@@ -30,7 +32,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        MonthYearPickerLocalizations.delegate],
       routes: {
         '/admin_main_menu':(context) => AdminMainMenu(),
         '/user_main_menu':(context) => UserMainMenu(),

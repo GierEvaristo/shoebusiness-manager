@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shoebusiness_manager/screens/track_sales/track_sales.dart';
 import 'package:shoebusiness_manager/services/sales.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row, Column, Alignment;
+import 'package:month_year_picker/month_year_picker.dart';
 import 'dart:ui' as ui;
 
 class TrackSales extends StatefulWidget{
@@ -143,8 +145,9 @@ class _TrackSalesState extends State<TrackSales>{
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.amber,
-                      onPrimary: Colors.white
+                    elevation: 0,
+                    primary: Colors.amber,
+                    onPrimary: Colors.white
                   ),
                   child: Text(
                     'Back',
@@ -156,8 +159,9 @@ class _TrackSalesState extends State<TrackSales>{
                     showAlertDialogExcel(context);
                   },
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      onPrimary: Colors.white
+                    elevation: 0,
+                    primary: Colors.green,
+                    onPrimary: Colors.white
                   ),
                   child: Text(
                     'Generate monthly report (Excel)',
@@ -195,7 +199,17 @@ class _TrackSalesState extends State<TrackSales>{
 
     AlertDialog alert = AlertDialog(
       title: Text("Select month"),
-      content: Text('Date'),
+      content: ElevatedButton(
+        child: Text('Select'),
+        onPressed: () async{
+          final selected = await showMonthYearPicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2022),
+            lastDate: DateTime(2023),
+          );
+        },
+      ),
       actions: [
         cancelButton,
         continueButton,

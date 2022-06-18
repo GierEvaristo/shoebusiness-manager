@@ -234,14 +234,18 @@ class _InventoryState extends State<Inventory> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Back',
-                  ),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        primary: Colors.amber,
+                        onPrimary: Colors.white
+                    ),
+                    child: Text(
+                      'Back',
+                    )
                 ),
-
               ],
             ),
           ],
