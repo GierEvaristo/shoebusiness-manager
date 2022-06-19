@@ -11,12 +11,23 @@ import 'dart:ui' as ui;
 
 
 class ManageOrders extends StatefulWidget {
-  ManageOrders({Key? key}) : super(key: key);
+  late bool chosenstatus;
+  ManageOrders({Key? key, required this.chosenstatus}) : super(key: key);
   @override
   State<ManageOrders> createState() => _ManageOrdersState();
+
 }
 
 class _ManageOrdersState extends State<ManageOrders> {
+
+  List<Customer> filtered = [];
+
+  @override
+  initState() {
+    super.initState();
+    bool getstatus = widget.chosenstatus;
+  }
+
 
   Stream<List<Customer>> readOrder(){
     return FirebaseFirestore.instance.
@@ -36,6 +47,7 @@ class _ManageOrdersState extends State<ManageOrders> {
     15,
         (index) => 'Item ${index + 1}',
   );
+
 
 
   Widget buildCard(Customer customer){
@@ -198,6 +210,45 @@ class _ManageOrdersState extends State<ManageOrders> {
     );
   }
   showAlertDialogDelete(BuildContext context, Customer customer) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes"),
+      onPressed:  () async {
+        await deleteOrderInDatabase(customer);
+        Fluttertoast.showToast(
+          msg: "Deleted successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 16,
+          backgroundColor: Colors.grey[200],
+        );
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete"),
+      content: Text("Are you sure you want to delete\n${customer.name}?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlertDialogDismiss(BuildContext context, Customer customer) {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),

@@ -17,7 +17,6 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
-
   late Future<bool> admin;
   TextEditingController searchController = TextEditingController();
 
