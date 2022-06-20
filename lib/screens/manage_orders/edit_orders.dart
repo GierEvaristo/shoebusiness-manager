@@ -3,9 +3,12 @@ import 'package:image/image.dart';
 import '../../services/customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shoebusiness_manager/screens/inventory_menu/inventory.dart';
-
+import 'package:shoebusiness_manager/screens/manage_orders/add_items_order.dart';
 import '../../services/order.dart';
 import '../../services/stock.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+
 
 
 
@@ -37,7 +40,7 @@ class _EditOrdersState extends State<EditOrders> {
   }
 
   Future<void> deleteOrderInDatabase(Customer customer) async {
-    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).delete();
+    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'orders' : FieldValue.arrayRemove(widget.currentCustomer.orders)});
   }
 
 
@@ -109,9 +112,8 @@ class _EditOrdersState extends State<EditOrders> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            ElevatedButton(onPressed: (
-
-                                ){
+                            ElevatedButton(onPressed: (){
+                              showAlertDialogDelete(context, widget.currentCustomer);
                             }, child: Text('Delete')),
                           ]
                       ),
@@ -160,7 +162,10 @@ class _EditOrdersState extends State<EditOrders> {
             shape: CircleBorder(),
             child : Text('Add',
                 style: TextStyle(color: Colors.white)),
-            onPressed: (){}
+            onPressed: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddItemsOrder(chosencustomer: widget.currentCustomer,)));
+            }
         ),
         body: SafeArea(
           child: Column(
@@ -228,6 +233,44 @@ class _EditOrdersState extends State<EditOrders> {
             ],
           ),
         )
+    );
+  }
+  showAlertDialogDelete(BuildContext context, Customer customer) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes"),
+      onPressed:  () async {
+        await deleteOrderInDatabase(customer);
+        Fluttertoast.showToast(
+          msg: "Deleted successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 16,
+          backgroundColor: Colors.grey[200],
+        );
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete"),
+      content: Text("Are you sure you want to delete\n${customer.name}?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
