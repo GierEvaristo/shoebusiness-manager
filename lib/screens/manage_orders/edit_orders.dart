@@ -4,6 +4,7 @@ import '../../services/customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shoebusiness_manager/screens/inventory_menu/inventory.dart';
 
+import '../../services/order.dart';
 import '../../services/stock.dart';
 
 
@@ -23,7 +24,7 @@ class _EditOrdersState extends State<EditOrders> {
   @override
   initState(){
     super.initState();
-    customerID = widget.currentCustomer.docID;
+    customerID = widget.currentCustomer.customerDocID;
     dataFuture= readCustomer();
   }
 
@@ -36,12 +37,25 @@ class _EditOrdersState extends State<EditOrders> {
   }
 
   Future<void> deleteOrderInDatabase(Customer customer) async {
-    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.docID).delete();
+    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).delete();
   }
 
 
-  Widget buildCard(String model, String color, int size, int qty, int price){
+  Future<String> getStockName(Order order) async {
+    String stockDocID = order.docID;
+    Map<String,dynamic> stockFields = await FirebaseFirestore.instance.collection('seacrest_inventory').doc(stockDocID).get()
+        .then((snapshot) => snapshot.data()!);
+    return stockFields['name'];
+  }
 
+  Future<String> getStockColor(Order order) async {
+    String stockDocID = order.docID;
+    Map<String,dynamic> stockFields = await FirebaseFirestore.instance.collection('seacrest_inventory').doc(stockDocID).get()
+        .then((snapshot) => snapshot.data()!);
+    return stockFields['color'];
+  }
+
+  Widget buildCard(Order order){
     return Card(
         child: Padding(
           padding: EdgeInsets.all(10.0),
@@ -55,11 +69,31 @@ class _EditOrdersState extends State<EditOrders> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Model: ${model}', style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text('Color: ${color}'),
-                        Text('Size: ${size}'),
-                        Text('Quantity: ${qty}'),
-                        Text('Price: ${price}'),
+                        FutureBuilder<String>(
+                            future: getStockName(order),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData){
+                                return Text('Name: ${snapshot.data!}', style: TextStyle(fontWeight: FontWeight.bold));
+                              }
+                              else {
+                                return Text('...', style: TextStyle(fontWeight: FontWeight.bold));
+                              }
+                            }
+                        ),
+                        FutureBuilder<String>(
+                            future: getStockColor(order),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData){
+                                return Container(child: Text('Color: ${snapshot.data!}', style: TextStyle(fontWeight: FontWeight.bold)));
+                              }
+                              else {
+                                return Text('...', style: TextStyle(fontWeight: FontWeight.bold));
+                              }
+                            }
+                        ),
+                        Text('Size: ${order.size}'),
+                        Text('Quantity: ${order.qty}'),
+                        Text('Price: ${order.price}'),
                         Row(),
                       ]
                   ),
@@ -90,10 +124,20 @@ class _EditOrdersState extends State<EditOrders> {
         )
     );
   }
+
   Widget buildBody(Customer customer){
     List<Widget> cardList = [];
     customer.orders.forEach((element) {
-      cardList.add(buildCard( element['model'], element['color'],element['size'], element['qty'], element['price_sold']));
+      cardList.add(buildCard(
+          Order(
+              model: element['model'],
+              color: element['color'],
+              docID: element['docID'],
+              size: element['size'],
+              qty: element['qty'],
+              price: element['price_sold']
+          )
+      ));
     });
 
     for (int i = 0 ; i<cardList.length; i++){
@@ -130,17 +174,19 @@ class _EditOrdersState extends State<EditOrders> {
                       Customer? customer = snapshot.data;
                       return Row(
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            height: 150,
-                            child: Column (
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Name: ${customer!.name}', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  Text('Address: ${customer.address}', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  Text('Contact Number: ${customer.number}', style: TextStyle(fontWeight: FontWeight.bold)),
-                                ]
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              height: 150,
+                              child: Column (
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Name: ${customer!.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                    Text('Address: ${customer.address}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                    Text('Contact Number: ${customer.number}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ]
+                              ),
                             ),
                           )
                         ],

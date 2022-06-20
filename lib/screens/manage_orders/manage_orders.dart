@@ -21,17 +21,17 @@ class ManageOrders extends StatefulWidget {
 class _ManageOrdersState extends State<ManageOrders> {
 
   List<Customer> filtered = [];
-
+  late bool getStatus;
   @override
   initState() {
     super.initState();
-    bool getstatus = widget.chosenstatus;
+    getStatus = widget.chosenstatus;
   }
 
 
   Stream<List<Customer>> readOrder(){
     return FirebaseFirestore.instance.
-    collection('seacrest_orders').
+    collection('seacrest_orders').where('completed', isEqualTo :getStatus).
     snapshots().
     map((snapshot) => snapshot.docs.map((doc) {
       return Customer.fromJson(doc.data(),doc.id);
@@ -39,7 +39,7 @@ class _ManageOrdersState extends State<ManageOrders> {
   }
 
   Future<void> deleteOrderInDatabase(Customer customer) async {
-    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.docID).delete();
+    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).delete();
   }
 
 

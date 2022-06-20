@@ -48,6 +48,7 @@ class _InventoryState extends State<Inventory> {
     }).toList());
   }
 
+
   List<String> items = List.generate(
     15,
     (index) => 'Item ${index + 1}',
