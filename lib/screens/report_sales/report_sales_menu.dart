@@ -11,7 +11,7 @@ class ReportSalesMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+          padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,10 +52,6 @@ class ReportSalesMenu extends StatelessWidget {
         )
     );
   }
-
-  Future signOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
 }
 
 class CustomButton2 extends StatelessWidget {
@@ -74,17 +70,19 @@ class CustomButton2 extends StatelessWidget {
           padding: const EdgeInsets.only(right: 20),
           child: Container(child: Image.asset('assets/$filename'), height: 45, width: 45,),
         ),
-        ElevatedButton(
-          onPressed: onPressed,
-          child: Text(
-            text!,
-            textScaleFactor: 1.3,
+        Expanded(
+          child: ElevatedButton(
+            onPressed: onPressed,
+            child: Text(
+              text!,
+              textScaleFactor: 1.3,
+            ),
+            style: ElevatedButton.styleFrom(
+                onPrimary: Colors.white,
+                primary: Theme.of(context).colorScheme.primary,
+                minimumSize: Size(250,55)
+            ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
           ),
-          style: ElevatedButton.styleFrom(
-              onPrimary: Colors.white,
-              primary: Theme.of(context).colorScheme.primary,
-              minimumSize: Size(250,55)
-          ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
         ),
       ],
     );

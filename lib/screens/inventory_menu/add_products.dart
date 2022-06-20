@@ -76,8 +76,8 @@ class _AddProductsState extends State<AddProducts> {
     final image = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 100,
-        maxHeight: 300,
-        maxWidth: 300,
+        maxHeight: 500,
+        maxWidth: 500,
         );
     setState(() {
       _image = image;
@@ -91,7 +91,7 @@ class _AddProductsState extends State<AddProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+        padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,

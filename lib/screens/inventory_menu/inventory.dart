@@ -109,8 +109,6 @@ class _InventoryState extends State<Inventory> {
                                         else return Container();
                                       }
                                     ),
-
-                                    SizedBox(width: 10),
                                     IconButton(
                                       onPressed: (){
                                         Navigator.push(context,
@@ -119,7 +117,6 @@ class _InventoryState extends State<Inventory> {
                                       },
                                       icon: Icon(Icons.view_agenda),
                                     ),
-                                    SizedBox(width: 10),
                                     IconButton(
                                         onPressed: (){
                                           Navigator.push(context,

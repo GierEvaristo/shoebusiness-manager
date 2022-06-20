@@ -83,7 +83,7 @@ class _ReportSalesState extends State<ReportSales> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+            padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 

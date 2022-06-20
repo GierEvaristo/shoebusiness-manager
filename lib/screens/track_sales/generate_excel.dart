@@ -140,7 +140,7 @@ class _GenerateExcelState extends State<GenerateExcel> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Select Date Range',
+              Text('Generate Sales Report Excel\n\nSelect Date Range',
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold
@@ -150,7 +150,7 @@ class _GenerateExcelState extends State<GenerateExcel> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text('Start',
+                    child: Text('Range',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20
@@ -163,36 +163,8 @@ class _GenerateExcelState extends State<GenerateExcel> {
                         pickDateRange();
                       },
                       child: Text(
-                        '${dateRange.start.year}/${dateRange.start.month}/${dateRange.start.day}',
-                        textScaleFactor: 1.3,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.white,
-                          primary: Theme.of(context).colorScheme.primary,
-                          minimumSize: Size(10, 47)
-                      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text('End',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20
-                        )
-                    ),
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        pickDateRange();
-                      },
-                      child: Text(
-                        '${dateRange.end.year}/${dateRange.end.month}/${dateRange.end.day}',
+                        '${dateRange.start.year}/${dateRange.start.month}/${dateRange.start.day} - '
+                            '${dateRange.end.year}/${dateRange.end.month}/${dateRange.end.day}',
                         textScaleFactor: 1.3,
                       ),
                       style: ElevatedButton.styleFrom(
@@ -211,7 +183,7 @@ class _GenerateExcelState extends State<GenerateExcel> {
                       onPressed: () async {
                         await generateFilteredSales();
                         Fluttertoast.showToast(
-                          msg: "Writing file...",
+                          msg: "Checking for validity...",
                           toastLength: Toast.LENGTH_SHORT,
                           textColor: Colors.black,
                           fontSize: 16,
@@ -219,6 +191,13 @@ class _GenerateExcelState extends State<GenerateExcel> {
                         );
                         await Future.delayed(Duration(seconds:5));
                         if (filtered.isNotEmpty){
+                          Fluttertoast.showToast(
+                            msg: "Writing file...",
+                            toastLength: Toast.LENGTH_SHORT,
+                            textColor: Colors.black,
+                            fontSize: 16,
+                            backgroundColor: Colors.grey[200],
+                          );
                           await generateExcel();
                           setState((){filtered = [];});
                           Fluttertoast.showToast(
