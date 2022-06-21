@@ -94,7 +94,6 @@ class _EditOrdersState extends State<EditOrders> {
                         Text('Size: ${order.size}'),
                         Text('Quantity: ${order.qty}'),
                         Text('Price: ${order.price}'),
-                        Row(),
                       ]
                   ),
                 ),
@@ -130,8 +129,6 @@ class _EditOrdersState extends State<EditOrders> {
     customer.orders.forEach((element) {
       cardList.add(buildCard(
           Order(
-              model: element['model'],
-              color: element['color'],
               docID: element['docID'],
               size: element['size'],
               qty: element['qty'],

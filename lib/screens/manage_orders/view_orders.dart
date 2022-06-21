@@ -26,23 +26,31 @@ class _ViewOrdersState extends State<ViewOrders> {
     dataFuture = readCustomer();
   }
 
-  Future<Customer?> readCustomer() async {
+  // Future<Customer?> readCustomer() async {
+  //   final docCustomer = FirebaseFirestore.instance.collection('seacrest_orders').doc(customerID);
+  //   final snapshot = await docCustomer.get();
+  //   if (snapshot.exists){
+  //     print('Line 32');
+  //     Customer customer = Customer.fromJson(snapshot.data()!, customerID);
+  //     print(customer);
+  //     for (int i = 0; i<customer.orders.length; i++){
+  //       print(customer.orders[i]['docID']);
+  //       Map<String,dynamic> stock = await FirebaseFirestore.instance.
+  //       collection('seacrest_inventory').doc(customer.orders[i]['docID']).get().then((snapshot) => snapshot.data()!);
+  //       print(stock);
+  //       customer.orders[i]['model'] = stock['name'] as String;
+  //       print(stock['name']);
+  //       customer.orders[i]['color'] = stock['color'] as String;
+  //     }
+  //     return customer;
+  //   }
+  // }
+
+  Future<Customer?> readCustomer() async{
     final docCustomer = FirebaseFirestore.instance.collection('seacrest_orders').doc(customerID);
     final snapshot = await docCustomer.get();
     if (snapshot.exists){
-      print('Line 32');
-      Customer customer = Customer.fromJson(snapshot.data()!, customerID);
-      print(customer);
-      for (int i = 0; i<customer.orders.length; i++){
-        print(customer.orders[i]['docID']);
-        Map<String,dynamic> stock = await FirebaseFirestore.instance.
-        collection('seacrest_inventory').doc(customer.orders[i]['docID']).get().then((snapshot) => snapshot.data()!);
-        print(stock);
-        customer.orders[i]['model'] = stock['name'] as String;
-        print(stock['name']);
-        customer.orders[i]['color'] = stock['color'] as String;
-      }
-      return customer;
+      return Customer.fromJson(snapshot.data()!, customerID);
     }
   }
 
@@ -78,6 +86,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                           future: getStockName(order),
                           builder: (context, snapshot) {
                             if (snapshot.hasData){
+                              print('Name has data');
                               return Text('Name: ${snapshot.data!}', style: TextStyle(fontWeight: FontWeight.bold));
                             }
                             else {
@@ -89,6 +98,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                           future: getStockColor(order),
                           builder: (context, snapshot) {
                             if (snapshot.hasData){
+                              print('Color has data');
                               return Text('Color: ${snapshot.data!}', style: TextStyle(fontWeight: FontWeight.bold));
                             }
                             else {
@@ -135,8 +145,6 @@ class _ViewOrdersState extends State<ViewOrders> {
     customer.orders.forEach((element) {
       cardList.add(buildCard(
           Order(
-              model: element['model'],
-              color: element['color'],
               docID: element['docID'],
               size: element['size'],
               qty: element['qty'],
