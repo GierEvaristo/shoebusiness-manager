@@ -42,6 +42,11 @@ class _ManageOrdersState extends State<ManageOrders> {
   Future<void> deleteOrderInDatabase(Customer customer) async {
     FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).delete();
   }
+  
+  Future<void> dismissOrderInDatabase(Customer customer) async {
+    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'completed' : true});
+
+  }
 
 
   List<String> items = List.generate(
@@ -80,7 +85,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                     showAlertDialogDelete(context, customer);
                                   }, child: Text('Delete')),
                                   ElevatedButton(onPressed: (){
-
+                                    showAlertDialogDismiss(context, customer);
                                   }, child: Text('Dismiss')),
                                   IconButton(
                                     onPressed: (){
@@ -264,9 +269,9 @@ class _ManageOrdersState extends State<ManageOrders> {
     Widget continueButton = TextButton(
       child: Text("Yes"),
       onPressed:  () async {
-        await deleteOrderInDatabase(customer);
+        await dismissOrderInDatabase(customer);
         Fluttertoast.showToast(
-          msg: "Deleted successfully",
+          msg: "Dismissed successfully",
           toastLength: Toast.LENGTH_SHORT,
           textColor: Colors.black,
           fontSize: 16,
@@ -277,8 +282,8 @@ class _ManageOrdersState extends State<ManageOrders> {
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Delete"),
-      content: Text("Are you sure you want to delete\n${customer.name}?"),
+      title: Text("Dismiss"),
+      content: Text("Are you sure you want to dismiss\n${customer.name}?"),
       actions: [
         cancelButton,
         continueButton,
@@ -293,4 +298,6 @@ class _ManageOrdersState extends State<ManageOrders> {
       },
     );
   }
+  
+  
 }

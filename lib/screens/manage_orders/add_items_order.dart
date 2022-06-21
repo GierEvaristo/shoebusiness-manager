@@ -20,8 +20,6 @@ class _AddItemsOrderState extends State<AddItemsOrder> {
   String? chosenSize;
   String chosenBrandProper = 'Seacrest';
   String itemName = 'Choose';
-  late String model;
-  late String color;
   late String customerID;
   String? docID;
   TextEditingController priceSoldController = TextEditingController();
@@ -39,8 +37,6 @@ class _AddItemsOrderState extends State<AddItemsOrder> {
   Future<void> uploadData() async {
     String uploadSize = chosenSize!.replaceAll('.', '');
     Map<String,dynamic> orderData = {
-      'model' : model,
-      'color' : color,
       'price_sold' : int.parse(priceSoldController.text),
       'qty' : int.parse(qtyController.text),
       'size' : int.parse(uploadSize),
@@ -105,8 +101,6 @@ class _AddItemsOrderState extends State<AddItemsOrder> {
                           setState((){
                             docID = chosenStockID;
                             itemName = '${stock['name']} - ${stock['color']}';
-                            model = stock['name'];
-                            color = stock['color'];
                           });
                         }
 
