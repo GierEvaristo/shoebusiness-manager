@@ -28,7 +28,7 @@ class _EditOrdersState extends State<EditOrders> {
   initState(){
     super.initState();
     customerID = widget.currentCustomer.customerDocID;
-    dataFuture= readCustomer();
+    dataFuture = readCustomer();
   }
 
   Future<Customer?> readCustomer() async{
@@ -159,9 +159,10 @@ class _EditOrdersState extends State<EditOrders> {
             shape: CircleBorder(),
             child : Text('Add',
                 style: TextStyle(color: Colors.white)),
-            onPressed: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddItemsOrder(chosencustomer: widget.currentCustomer,)));
+            onPressed: () async {
+              await Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddItemsOrder(chosencustomer: widget.currentCustomer))).then((_) =>
+              setState((){dataFuture = readCustomer();}));
             }
         ),
         body: SafeArea(
