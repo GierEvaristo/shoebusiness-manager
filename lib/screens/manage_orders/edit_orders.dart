@@ -39,10 +39,34 @@ class _EditOrdersState extends State<EditOrders> {
     }
   }
 
-  Future<void> deleteOrderInDatabase(Customer customer) async {
-    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'orders' : FieldValue.arrayRemove(widget.currentCustomer.orders)});
+  bool checkForOrderEquality(Order order1, Order order2){
+    if (order1.docID == order2.docID &&
+        order1.size == order2.size &&
+        order1.price == order2.price &&
+        order1.qty == order2.qty) return true;
+    else return false;
   }
 
+  Future<void> deleteOrderInDatabase(Order order) async {
+    Map<String,dynamic> customerInfo = await FirebaseFirestore.instance.
+    collection('seacrest_orders').doc(widget.currentCustomer.customerDocID).get().then((snapshot) => snapshot.data()!);
+    List<dynamic> customerOrders = customerInfo['orders'];
+
+    List<dynamic> newOrders = [];
+
+    for (final item in customerOrders){
+      Order temp = Order(docID: item['docID'], size: item['size'], qty: item['qty'], price: item['price_sold']);
+      if (!checkForOrderEquality(temp, order)){
+        newOrders.add(item);
+      }
+    }
+
+    print(newOrders);
+
+    FirebaseFirestore.instance.collection('seacrest_orders').
+    doc(widget.currentCustomer.customerDocID).update({'orders' : newOrders});
+
+  }
 
   Future<String> getStockName(Order order) async {
     String stockDocID = order.docID;
@@ -112,7 +136,7 @@ class _EditOrdersState extends State<EditOrders> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             ElevatedButton(onPressed: (){
-                              showAlertDialogDelete(context, widget.currentCustomer);
+                              showAlertDialogDelete(context, order);
                             }, child: Text('Delete')),
                           ]
                       ),
@@ -233,7 +257,7 @@ class _EditOrdersState extends State<EditOrders> {
         )
     );
   }
-  showAlertDialogDelete(BuildContext context, Customer customer) {
+  showAlertDialogDelete(BuildContext context, Order order) {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
@@ -242,7 +266,7 @@ class _EditOrdersState extends State<EditOrders> {
     Widget continueButton = TextButton(
       child: Text("Yes"),
       onPressed:  () async {
-        await deleteOrderInDatabase(customer);
+        await deleteOrderInDatabase(order);
         Fluttertoast.showToast(
           msg: "Deleted successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -251,12 +275,13 @@ class _EditOrdersState extends State<EditOrders> {
           backgroundColor: Colors.grey[200],
         );
         Navigator.of(context).pop();
+        setState((){dataFuture = readCustomer();});
       },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Delete"),
-      content: Text("Are you sure you want to delete\n${customer.name}?"),
+      content: Text("Are you sure you want to delete\n${order.docID}?"),
       actions: [
         cancelButton,
         continueButton,
