@@ -229,6 +229,31 @@ class _GenerateExcelState extends State<GenerateExcel> {
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Back',
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        onPrimary: Colors.white,
+                        minimumSize: Size(100, 40)
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+                  ),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //   },
+                  //   child: Text(
+                  //     'Edit',
+                  //   ),
+                  // ),
+                ],
+              ),
             ],
           )
         ),

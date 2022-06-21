@@ -119,8 +119,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                               Text('Name: ${customer.name}', style: TextStyle(fontWeight: FontWeight.bold)),
                               Text('Address: ${customer.address}'),
                               Text('Contact Number: ${customer.number}'),
-                              Text('Date: ${DateFormat.yMMMd().add_jm().format(customer.date.toDate())}'),
-                              Text('Completed: ${customer.status.toString()}'),
+                              Text('Added on: ${DateFormat.yMMMd().add_jm().format(customer.date.toDate())}'),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
