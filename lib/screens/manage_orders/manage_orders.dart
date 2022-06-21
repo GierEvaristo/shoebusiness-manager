@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,14 +46,6 @@ class _ManageOrdersState extends State<ManageOrders> {
     };
     FirebaseFirestore.instance.collection('seacrest_sales').add(salesData).
     then((documentSnapshot) => print("Reported sales with ID: ${documentSnapshot.id}"));
-
-    // final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(order.docID);
-    // Map<String,dynamic> stock = await doc.get().then((snapshot) => snapshot.data()!);
-    // print(stock);
-    // print(uploadSize);
-    // int qtyForSize = stock['size_qty']['$uploadSize'] as int;
-    // int newQty = qtyForSize - order.qty;
-    // await doc.update({'size_qty.${uploadSize}' : newQty});
   }
 
   Stream<List<Customer>> readOrder(){
@@ -68,9 +62,7 @@ class _ManageOrdersState extends State<ManageOrders> {
   }
   
   Future<void> dismissOrderInDatabase(Customer customer) async {
-    FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'completed' : true});
-    print(customer.orders.isNotEmpty.toString().toUpperCase());
-    print(customer.orders.length);
+    await FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'completed' : true});
     if (customer.orders.isNotEmpty) {
       for (int i = 0; i < customer.orders.length; i++){
         final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(customer.orders[i]['docID']);
@@ -81,11 +73,24 @@ class _ManageOrdersState extends State<ManageOrders> {
         int newQty = qtyForSize - orderqty;
         doc.update({'size_qty.${ordersize}' : newQty});
         print('doc updated');
-        uploadReportData(customer.orders[i]);
+
+
+
+        //report sales
+        String uploadSize = customer.orders[i]['size'].toString();
+        Map<String,dynamic> salesData = {
+          'brand' : 'seacrest',
+          'price_sold' : customer.orders[i]['price_sold'],
+          'qty' : customer.orders[i]['qty'],
+          'size' : uploadSize,
+          'stock_docID' : customer.orders[i]['docID'],
+          'time_date' : FieldValue.serverTimestamp()
+        };
+        await FirebaseFirestore.instance.collection('seacrest_sales').add(salesData).
+        then((documentSnapshot) => print("Reported sales with ID: ${documentSnapshot.id}"));
         print('order reported');
       }
     }
-    setState((){});
   }
 
   List<String> items = List.generate(
@@ -316,6 +321,7 @@ class _ManageOrdersState extends State<ManageOrders> {
   }
 
   showAlertDialogDismiss(BuildContext context, Customer customer) {
+    final dialogContextCompleter = Completer<BuildContext>();
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
@@ -324,7 +330,9 @@ class _ManageOrdersState extends State<ManageOrders> {
     Widget continueButton = TextButton(
       child: Text("Yes"),
       onPressed: () async {
-        dismissOrderInDatabase(customer);
+        await dismissOrderInDatabase(customer);
+        final dialogContext = await dialogContextCompleter.future;
+        Navigator.pop(dialogContext);
         Fluttertoast.showToast(
           msg: "Dismissed successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -332,7 +340,6 @@ class _ManageOrdersState extends State<ManageOrders> {
           fontSize: 16,
           backgroundColor: Colors.grey[200],
         );
-        Navigator.of(context).pop();
       },
     );
     // set up the AlertDialog
@@ -345,14 +352,16 @@ class _ManageOrdersState extends State<ManageOrders> {
       ],
     );
 
+
     // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        if(!dialogContextCompleter.isCompleted) {
+          dialogContextCompleter.complete(context);
+        }
         return alert;
       },
     );
   }
-  
-  
 }
