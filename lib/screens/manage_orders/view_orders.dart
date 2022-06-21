@@ -114,26 +114,6 @@ class _ViewOrdersState extends State<ViewOrders> {
                   ),
                 ),
               ),
-              Flexible (
-                flex:10,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ElevatedButton(onPressed: (
-
-                                ){
-                            }, child: Text('Delete')),
-                          ]
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         )

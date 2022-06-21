@@ -34,16 +34,7 @@ class _AddPerOrderState extends State<AddPerOrder> {
       'completed' : false,
       'date' : DateTime.now(),
     };
-    List<dynamic> orders = [
-      {
-        'color' : ' ',
-        'docID' : ' ',
-        'price_sold' : 0,
-        'qty' : 0,
-        'size' : 0,
-        'model' : ' ',
-      },
-    ];
+    List<dynamic> orders = [];
 
 
     showDialog(

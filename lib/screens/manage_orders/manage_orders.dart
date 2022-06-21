@@ -20,7 +20,8 @@ class ManageOrders extends StatefulWidget {
 
 class _ManageOrdersState extends State<ManageOrders> {
 
-  List<Customer> filtered = [];
+
+  TextEditingController searchController = TextEditingController();
   late bool getStatus;
   @override
   initState() {
@@ -142,8 +143,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                 Expanded(
                   child: SizedBox(
                     child: TextField(
-                      //controller: ,
-                      //onChanged: (val){},
+                      controller: searchController,
+                      onChanged: (val){setState((){});},
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -172,8 +173,14 @@ class _ManageOrdersState extends State<ManageOrders> {
                         if (snapshot.hasData){
                           print("snapshot has data xdddddddddddddddddddddddddddd");
                           final customer = snapshot.data!;
+                          List<Customer> filteredStocks = [];
+                          for (int i = 0; i< customer.length; i++){
+                            String sample = customer[i].name.toLowerCase() + ' ' + customer[i].address.toLowerCase() + ' ' + customer[i].number.toLowerCase();
+                            String input = searchController.text.toLowerCase();
+                            if (sample.contains(input)) filteredStocks.add(customer[i]);
+                          }
                           return ListView(
-                            children: customer.map(buildCard).toList(),
+                            children: filteredStocks.map(buildCard).toList(),
                           );
                         } else {
                           print("snapshot has NO data xdddddddddddddddddddddddddddd");
