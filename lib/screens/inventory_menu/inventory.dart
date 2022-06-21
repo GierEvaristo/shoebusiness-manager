@@ -104,7 +104,9 @@ class _InventoryState extends State<Inventory> {
                                               child: Text('Delete'),
                                               style: ElevatedButton.styleFrom(
                                                   primary: Colors.red,
-                                                  onPrimary: Colors.white)
+                                                  onPrimary: Colors.white,
+                                                  minimumSize: Size(50, 40)
+                                              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))
                                           );
                                         }
                                         else return Container();
@@ -149,6 +151,8 @@ class _InventoryState extends State<Inventory> {
         builder: (context, snapshot) {
           if(snapshot.hasData && snapshot.data == true){
             return FloatingActionButton(
+                highlightElevation: 0,
+                elevation: 0,
                 shape: CircleBorder(),
                 child : Icon(Icons.add, color: Colors.white),
                 onPressed: (){
@@ -235,10 +239,10 @@ class _InventoryState extends State<Inventory> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        primary: Colors.amber,
-                        onPrimary: Colors.white
-                    ),
+                        primary: Colors.green,
+                        onPrimary: Colors.white,
+                        minimumSize: Size(100, 40)
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                     child: Text(
                       'Back',
                     )

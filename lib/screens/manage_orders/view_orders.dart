@@ -151,70 +151,78 @@ class _ViewOrdersState extends State<ViewOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FutureBuilder<dynamic>(
-                  future: dataFuture,
-                  builder: (context,snapshot) {
-                    if (snapshot.hasData) {
-                      Customer? customer = snapshot.data;
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              height: 150,
-                              child: Column (
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Name: ${customer!.name}', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    Text('Address: ${customer.address}', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    Text('Contact Number: ${customer.number}', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  ]
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(15, 30, 15, 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FutureBuilder<dynamic>(
+                    future: dataFuture,
+                    builder: (context,snapshot) {
+                      if (snapshot.hasData) {
+                        Customer? customer = snapshot.data;
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                height: 150,
+                                child: Column (
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Name: ${customer!.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      Text('Address: ${customer.address}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      Text('Contact Number: ${customer.number}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ]
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      );
-                    } else {
-                      return Center(child: Container(margin: EdgeInsets.all(50),child: CircularProgressIndicator()));
+                            )
+                          ],
+                        );
+                      } else {
+                        return Center(child: Container(margin: EdgeInsets.all(50),child: CircularProgressIndicator()));
+                      }
                     }
-                  }
-              ),
-
-              FutureBuilder<Customer?>(
-                  future: dataFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData){
-                      final customer_orders = snapshot.data;
-                      return customer_orders == null ? Center(child: CircularProgressIndicator()) : buildBody(customer_orders);
-                    }
-                    else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  }
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ElevatedButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Back',
-                      ),
-                    ),
-                  ],
                 ),
-              )
-            ],
+
+                FutureBuilder<Customer?>(
+                    future: dataFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData){
+                        final customer_orders = snapshot.data;
+                        return customer_orders == null ? Center(child: CircularProgressIndicator()) : buildBody(customer_orders);
+                      }
+                      else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    }
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ElevatedButton(
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Back',
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          onPrimary: Colors.white,
+                          minimumSize: Size(100, 40)
+                        ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         )
     );

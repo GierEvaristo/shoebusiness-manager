@@ -44,6 +44,10 @@ class MyApp extends StatelessWidget {
       home: const Wrapper(),
       title: 'L.EvaristoShoeShop',
       theme: ThemeData(
+        cardTheme: CardTheme(
+          surfaceTintColor: Colors.transparent,
+          elevation: 0
+        ),
         splashFactory: InkSplash.splashFactory,
         useMaterial3: true,
         primaryColor: Colors.amber[600],

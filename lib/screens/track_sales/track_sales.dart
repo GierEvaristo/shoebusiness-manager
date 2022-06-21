@@ -155,10 +155,10 @@ class _TrackSalesState extends State<TrackSales>{
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    primary: Colors.amber,
-                    onPrimary: Colors.white
-                  ),
+                      primary: Colors.green,
+                      onPrimary: Colors.white,
+                      minimumSize: Size(100, 40)
+                  ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                   child: Text(
                     'Back',
                   )
@@ -170,10 +170,10 @@ class _TrackSalesState extends State<TrackSales>{
                         GenerateExcel(chosenBrand: widget.chosenBrand,)));
                   },
                   style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    primary: Colors.green,
-                    onPrimary: Colors.white
-                  ),
+                      primary: Colors.amber,
+                      onPrimary: Colors.white,
+                      minimumSize: Size(100, 40)
+                  ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                   child: Text(
                     'Generate Excel',
                   )

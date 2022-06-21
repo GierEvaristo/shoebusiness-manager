@@ -9,6 +9,9 @@ import 'package:shoebusiness_manager/services/customer.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
+import '../../services/order.dart';
+
+
 
 class ManageOrders extends StatefulWidget {
   late bool chosenstatus;
@@ -29,6 +32,27 @@ class _ManageOrdersState extends State<ManageOrders> {
     getStatus = widget.chosenstatus;
   }
 
+  Future<void> uploadReportData(Map<String,dynamic> order) async {
+    String uploadSize = order['size'].toString();
+    Map<String,dynamic> salesData = {
+      'brand' : 'seacrest',
+      'price_sold' : order['price_sold'],
+      'qty' : order['qty'],
+      'size' : uploadSize,
+      'stock_docID' : order['docID'],
+      'time_date' : FieldValue.serverTimestamp()
+    };
+    FirebaseFirestore.instance.collection('seacrest_sales').add(salesData).
+    then((documentSnapshot) => print("Reported sales with ID: ${documentSnapshot.id}"));
+
+    // final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(order.docID);
+    // Map<String,dynamic> stock = await doc.get().then((snapshot) => snapshot.data()!);
+    // print(stock);
+    // print(uploadSize);
+    // int qtyForSize = stock['size_qty']['$uploadSize'] as int;
+    // int newQty = qtyForSize - order.qty;
+    // await doc.update({'size_qty.${uploadSize}' : newQty});
+  }
 
   Stream<List<Customer>> readOrder(){
     return FirebaseFirestore.instance.
@@ -45,18 +69,24 @@ class _ManageOrdersState extends State<ManageOrders> {
   
   Future<void> dismissOrderInDatabase(Customer customer) async {
     FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'completed' : true});
-
-    for(int i = 0; i < customer.orders.length; i++){
-      final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(customer.orders[i]['docID']);
-      Map<String,dynamic> stock = await doc.get().then((snapshot) => snapshot.data()!);
-      int ordersize = customer.orders[i]['size'];
-      int orderqty = customer.orders[i]['qty'];
-      int qtyForSize = stock['size_qty']['${ordersize}'] as int;
-      int newQty = qtyForSize - orderqty;
-      await doc.update({'size_qty.${ordersize}' : newQty});
+    print(customer.orders.isNotEmpty.toString().toUpperCase());
+    print(customer.orders.length);
+    if (customer.orders.isNotEmpty) {
+      for (int i = 0; i < customer.orders.length; i++){
+        final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(customer.orders[i]['docID']);
+        Map<String,dynamic>? stock = await doc.get().then((snapshot) => snapshot.data());
+        int ordersize = customer.orders[i]['size'];
+        int orderqty = customer.orders[i]['qty'];
+        int qtyForSize = stock?['size_qty']['${ordersize}'] as int;
+        int newQty = qtyForSize - orderqty;
+        doc.update({'size_qty.${ordersize}' : newQty});
+        print('doc updated');
+        uploadReportData(customer.orders[i]);
+        print('order reported');
+      }
     }
+    setState((){});
   }
-
 
   List<String> items = List.generate(
     15,
@@ -65,7 +95,7 @@ class _ManageOrdersState extends State<ManageOrders> {
 
 
 
-  Widget buildCard(Customer customer){
+  Widget buildCard(BuildContext context, Customer customer){
     return Card(
         child: Padding(
           padding: EdgeInsets.all(10.0),
@@ -74,8 +104,7 @@ class _ManageOrdersState extends State<ManageOrders> {
               builder: (context, snapshot) {
                 return Row(
                   children: [
-                    Flexible (
-                      flex:6,
+                    Expanded (
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Column(
@@ -92,10 +121,20 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 children: [
                                   ElevatedButton(onPressed: (){
                                     showAlertDialogDelete(context, customer);
-                                  }, child: Text('Delete')),
+                                  }, child: Text('Delete')
+                                  , style: ElevatedButton.styleFrom(
+                                          primary: Colors.red,
+                                          onPrimary: Colors.white,
+                                          minimumSize: Size(50, 40)
+                                      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))),
                                   if (!widget.chosenstatus) ElevatedButton(onPressed: (){
                                     showAlertDialogDismiss(context, customer);
-                                  }, child: Text('Dismiss')),
+                                  }, child: Text('Dismiss'),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.amber,
+                                          onPrimary: Colors.white,
+                                          minimumSize: Size(50, 40)
+                                      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))),
                                   IconButton(
                                     onPressed: (){
                                       Navigator.push(context,
@@ -130,6 +169,8 @@ class _ManageOrdersState extends State<ManageOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+          highlightElevation: 0,
+          elevation: 0,
           shape: CircleBorder(),
           child : Text('Add',
               style: TextStyle(color: Colors.white)),
@@ -181,12 +222,12 @@ class _ManageOrdersState extends State<ManageOrders> {
             SizedBox(height: 10),
             Expanded(
               child: SizedBox(
-                  child: StreamBuilder<List<Customer>>(
+                  child: StreamBuilder(
                       stream: readOrder(),
                       builder: (context, snapshot){
                         if (snapshot.hasData){
                           print("snapshot has data xdddddddddddddddddddddddddddd");
-                          final customer = snapshot.data!;
+                          final customer = snapshot.data! as List<Customer>;
                           List<Customer> filteredStocks = [];
                           for (int i = 0; i< customer.length; i++){
                             String sample = customer[i].name.toLowerCase() + ' ' + customer[i].address.toLowerCase() + ' ' + customer[i].number.toLowerCase();
@@ -194,7 +235,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                             if (sample.contains(input)) filteredStocks.add(customer[i]);
                           }
                           return ListView(
-                            children: filteredStocks.map(buildCard).toList(),
+                            children: filteredStocks.map((stock)=> buildCard(context, stock)).toList(),
                           );
                         } else {
                           print("snapshot has NO data xdddddddddddddddddddddddddddd");
@@ -215,6 +256,11 @@ class _ManageOrdersState extends State<ManageOrders> {
                   child: Text(
                     'Back',
                   ),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white,
+                      minimumSize: Size(100, 40)
+                  ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                 ),
                 // ElevatedButton(
                 //   onPressed: () {
@@ -277,8 +323,8 @@ class _ManageOrdersState extends State<ManageOrders> {
     );
     Widget continueButton = TextButton(
       child: Text("Yes"),
-      onPressed:  () async {
-        await dismissOrderInDatabase(customer);
+      onPressed: () async {
+        dismissOrderInDatabase(customer);
         Fluttertoast.showToast(
           msg: "Dismissed successfully",
           toastLength: Toast.LENGTH_SHORT,

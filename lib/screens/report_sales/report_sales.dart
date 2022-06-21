@@ -237,10 +237,10 @@ class _ReportSalesState extends State<ReportSales> {
                         'Back'
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
-                        onPrimary: Colors.white,
-                        minimumSize: Size(100, 40)
-                      ),
+                          primary: Colors.green,
+                          onPrimary: Colors.white,
+                          minimumSize: Size(100, 40)
+                      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                     ),
                     ElevatedButton(
                       onPressed: (){
@@ -264,7 +264,7 @@ class _ReportSalesState extends State<ReportSales> {
                           primary: Colors.amber,
                           onPrimary: Colors.white,
                           minimumSize: Size(100, 40)
-                      ),
+                      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                     ),
 
                   ],

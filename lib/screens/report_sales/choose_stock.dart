@@ -75,9 +75,11 @@ class _ChooseStockState extends State<ChooseStock> {
                                         Navigator.pop(context,stock.docID);
                                       },
                                       child: Text('Choose'),
-                                      style: ElevatedButton.styleFrom(
-                                      primary: Colors.green,
-                                      onPrimary: Colors.white)
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.amber,
+                                            onPrimary: Colors.white,
+                                            minimumSize: Size(100, 40)
+                                        ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))
                                     ),
                                   ],
                                 ),
@@ -174,6 +176,11 @@ class _ChooseStockState extends State<ChooseStock> {
                   child: Text(
                     'Back',
                   ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    onPrimary: Colors.white,
+                    minimumSize: Size(100, 40)
+                  ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))
                 ),
 
               ],

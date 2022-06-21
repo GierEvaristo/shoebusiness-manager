@@ -175,7 +175,7 @@ class _AddProductsState extends State<AddProducts> {
                     primary: Colors.green,
                     onPrimary: Colors.white,
                     minimumSize: Size(100, 40)
-                ),
+                ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -192,7 +192,7 @@ class _AddProductsState extends State<AddProducts> {
                         primary: Colors.green,
                         onPrimary: Colors.white,
                         minimumSize: Size(100, 40)
-                    ),
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                   ),
                   ElevatedButton(
                     onPressed: () async{
@@ -224,7 +224,7 @@ class _AddProductsState extends State<AddProducts> {
                         primary: Colors.amber,
                         onPrimary: Colors.white,
                         minimumSize: Size(100, 40)
-                    ),
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                   ),
 
                 ],

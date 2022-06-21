@@ -61,7 +61,7 @@ class _AddPerOrderState extends State<AddPerOrder> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Add Seacrest order',
+              Text('Add Seacrest customer',
                 style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold
@@ -147,7 +147,7 @@ class _AddPerOrderState extends State<AddPerOrder> {
                         primary: Colors.green,
                         onPrimary: Colors.white,
                         minimumSize: Size(100, 40)
-                    ),
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                   ),
                   ElevatedButton(
                     onPressed: () async{
@@ -179,7 +179,7 @@ class _AddPerOrderState extends State<AddPerOrder> {
                         primary: Colors.amber,
                         onPrimary: Colors.white,
                         minimumSize: Size(100, 40)
-                    ),
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                   ),
 
                 ],

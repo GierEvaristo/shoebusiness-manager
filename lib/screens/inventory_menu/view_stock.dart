@@ -82,72 +82,80 @@ class _ViewStockState extends State<ViewStock> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FutureBuilder<String>(
-              future: widget.currentStock.generateURL(),
-              builder: (context,snapshot) {
-                if (snapshot.hasData) {
-                  return Row(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      height: 150,
-                      child: Container(
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FutureBuilder<String>(
+                future: widget.currentStock.generateURL(),
+                builder: (context,snapshot) {
+                  if (snapshot.hasData) {
+                    return Row(
+                    children: [
+                      SizedBox(
                         width: 150,
-                        child: Image.network(snapshot.data.toString())
-                      )
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      height: 150,
-                      child: Column (
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(stockBrandProper),
-                          Text('Model: ${widget.currentStock.name}'),
-                          Text('Color: ${widget.currentStock.color}')
-                        ]
+                        height: 150,
+                        child: Container(
+                          width: 150,
+                          child: Image.network(snapshot.data.toString())
+                        )
                       ),
-                    )
-                  ],
-                );
-                } else {
-                  return Center(child: Container(margin: EdgeInsets.all(50),child: CircularProgressIndicator()));
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 150,
+                        child: Column (
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(stockBrandProper),
+                            Text('Model: ${widget.currentStock.name}'),
+                            Text('Color: ${widget.currentStock.color}')
+                          ]
+                        ),
+                      )
+                    ],
+                  );
+                  } else {
+                    return Center(child: Container(margin: EdgeInsets.all(50),child: CircularProgressIndicator()));
+                  }
                 }
-              }
-            ),
+              ),
 
-            FutureBuilder<Stock?>(
-              future: dataFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasData){
-                  final stock = snapshot.data;
-                  return stock == null ? Center(child: CircularProgressIndicator()) : buildBody(stock);
+              FutureBuilder<Stock?>(
+                future: dataFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData){
+                    final stock = snapshot.data;
+                    return stock == null ? Center(child: CircularProgressIndicator()) : buildBody(stock);
+                  }
+                  else {
+                    return Center(child: CircularProgressIndicator());
+                  }
                 }
-                else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              }
-            ),
+              ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Back',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Back',
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        onPrimary: Colors.white,
+                        minimumSize: Size(100, 40)
+                    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       )
     );
