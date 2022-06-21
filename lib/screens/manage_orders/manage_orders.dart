@@ -49,8 +49,6 @@ class _ManageOrdersState extends State<ManageOrders> {
         (index) => 'Item ${index + 1}',
   );
 
-
-
   Widget buildCard(Customer customer){
     return Card(
         child: Padding(
@@ -79,8 +77,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   ElevatedButton(onPressed: (){
                                     showAlertDialogDelete(context, customer);
                                   }, child: Text('Delete')),
-                                  ElevatedButton(onPressed: (){
-
+                                  if (!widget.chosenstatus) ElevatedButton(onPressed: (){
                                   }, child: Text('Dismiss')),
                                   IconButton(
                                     onPressed: (){
