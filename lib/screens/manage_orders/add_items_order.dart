@@ -240,7 +240,7 @@ class _AddItemsOrderState extends State<AddItemsOrder> {
                       }
                     },
                     child: Text(
-                        'Report'
+                        'Add Order'
                     ),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.amber,

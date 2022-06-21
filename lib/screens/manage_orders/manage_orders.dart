@@ -46,6 +46,15 @@ class _ManageOrdersState extends State<ManageOrders> {
   Future<void> dismissOrderInDatabase(Customer customer) async {
     FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'completed' : true});
 
+    for(int i = 0; i < customer.orders.length; i++){
+      final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(customer.orders[i]['docID']);
+      Map<String,dynamic> stock = await doc.get().then((snapshot) => snapshot.data()!);
+      int ordersize = customer.orders[i]['size'];
+      int orderqty = customer.orders[i]['qty'];
+      int qtyForSize = stock['size_qty']['${ordersize}'] as int;
+      int newQty = qtyForSize - orderqty;
+      await doc.update({'size_qty.${ordersize}' : newQty});
+    }
   }
 
 
@@ -84,7 +93,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   ElevatedButton(onPressed: (){
                                     showAlertDialogDelete(context, customer);
                                   }, child: Text('Delete')),
-                                  ElevatedButton(onPressed: (){
+                                  if (!widget.chosenstatus) ElevatedButton(onPressed: (){
                                     showAlertDialogDismiss(context, customer);
                                   }, child: Text('Dismiss')),
                                   IconButton(
