@@ -37,7 +37,6 @@ class _TrackSalesState extends State<TrackSales>{
         snapshot.docs.map((doc) => Sales.fromJson(doc.data(), doc.id)).toList());
   }
   //DateFormat.yMMMd().add_jm().format(sale.timeDate.toDate())
-
   // Future<List<Sales>> getSalesByDate(){
   //   DateFormat.YEAR_MONTH
   //   return FirebaseFirestore.instance.collection('${widget.chosenBrand}_sales').where('time_date', )

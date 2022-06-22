@@ -6,12 +6,13 @@ class Customer {
   late String address;
   late String number;
   late dynamic date;
+  late dynamic dateCompleted;
   late bool status;
   late String customerDocID;
   late List<dynamic> orders;
 
   Customer({required this.name, required this.address, required this.number,
-    required this.date, required this.status, required this.customerDocID, required this.orders}){
+    required this.date, required this.status, required this.customerDocID, required this.orders, required this.dateCompleted}){
   }
 
   static Customer fromJson(Map<String, dynamic> json, String customerDocID) {
@@ -22,7 +23,8 @@ class Customer {
       status: json['completed'],
       date: json['date'],
       customerDocID : customerDocID,
-      orders : json['orders'] as List<dynamic>
+      orders : json['orders'] as List<dynamic>,
+      dateCompleted : json['time_completed']
     );
   }
 }

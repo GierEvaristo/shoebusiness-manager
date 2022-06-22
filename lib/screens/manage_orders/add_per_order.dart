@@ -32,10 +32,10 @@ class _AddPerOrderState extends State<AddPerOrder> {
       'address' : productAddressController.text,
       'contact number' : productNumberController.text,
       'completed' : false,
-      'date' : DateTime.now(),
+      'date' : FieldValue.serverTimestamp(),
+      'time_completed' : FieldValue.serverTimestamp()
     };
     List<dynamic> orders = [];
-
 
     showDialog(
         context: context,

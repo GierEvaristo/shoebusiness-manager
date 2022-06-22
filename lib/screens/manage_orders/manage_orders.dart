@@ -24,8 +24,6 @@ class ManageOrders extends StatefulWidget {
 }
 
 class _ManageOrdersState extends State<ManageOrders> {
-
-
   TextEditingController searchController = TextEditingController();
   late bool getStatus;
   @override
@@ -49,20 +47,32 @@ class _ManageOrdersState extends State<ManageOrders> {
   }
 
   Stream<List<Customer>> readOrder(){
-    return FirebaseFirestore.instance.
-    collection('seacrest_orders').where('completed', isEqualTo :getStatus).
+    return getStatus ? FirebaseFirestore.instance.  // if completed
+    collection('seacrest_orders').where('completed', isEqualTo : true).orderBy('time_completed', descending: true).
     snapshots().
     map((snapshot) => snapshot.docs.map((doc) {
       return Customer.fromJson(doc.data(),doc.id);
-    }).toList());
+    }).toList())
+    :
+    FirebaseFirestore.instance.         // if not completed
+    collection('seacrest_orders').where('completed', isEqualTo : false).orderBy('date').
+    snapshots().
+    map((snapshot) => snapshot.docs.map((doc) {
+      return Customer.fromJson(doc.data(),doc.id);
+    }).toList())
+    ;
   }
 
-  Future<void> deleteOrderInDatabase(Customer customer) async {
+  Future<void> deleteCustomerInDatabase(Customer customer) async {
     FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).delete();
   }
   
-  Future<void> dismissOrderInDatabase(Customer customer) async {
-    await FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({'completed' : true});
+  Future<void> dismissCustomerInDatabase(Customer customer) async {
+    await FirebaseFirestore.instance.collection('seacrest_orders').doc(customer.customerDocID).update({
+      'completed' : true,
+      'time_completed' : FieldValue.serverTimestamp()
+    });
+
     if (customer.orders.isNotEmpty) {
       for (int i = 0; i < customer.orders.length; i++){
         final doc = FirebaseFirestore.instance.collection('seacrest_inventory').doc(customer.orders[i]['docID']);
@@ -73,8 +83,6 @@ class _ManageOrdersState extends State<ManageOrders> {
         int newQty = qtyForSize - orderqty;
         doc.update({'size_qty.${ordersize}' : newQty});
         print('doc updated');
-
-
 
         //report sales
         String uploadSize = customer.orders[i]['size'].toString();
@@ -120,6 +128,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                               Text('Address: ${customer.address}'),
                               Text('Contact Number: ${customer.number}'),
                               Text('Added on: ${DateFormat.yMMMd().add_jm().format(customer.date.toDate())}'),
+                              if (getStatus == true) Text('Completed on: ${DateFormat.yMMMd().add_jm().format(customer.dateCompleted.toDate())}'),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -132,8 +141,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                                           minimumSize: Size(50, 40)
                                       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0))),
                                   if (!widget.chosenstatus) ElevatedButton(onPressed: (){
-                                    showAlertDialogDismiss(context, customer);
-                                  }, child: Text('Dismiss'),
+                                    showAlertDialogComplete(context, customer);
+                                  }, child: Text('Complete'),
                                       style: ElevatedButton.styleFrom(
                                           primary: Colors.amber,
                                           onPrimary: Colors.white,
@@ -172,16 +181,19 @@ class _ManageOrdersState extends State<ManageOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          highlightElevation: 0,
-          elevation: 0,
-          shape: CircleBorder(),
-          child : Text('Add',
-              style: TextStyle(color: Colors.white)),
-          onPressed: (){
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AddPerOrder(chosenBrand: 'seacrest')));
-          }
+      floatingActionButton: Visibility(
+        visible: !getStatus,
+        child: FloatingActionButton(
+            highlightElevation: 0,
+            elevation: 0,
+            shape: CircleBorder(),
+            child : Text('Add',
+                style: TextStyle(color: Colors.white)),
+            onPressed: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddPerOrder(chosenBrand: 'seacrest')));
+            }
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30, 80, 30, 40),
@@ -289,7 +301,7 @@ class _ManageOrdersState extends State<ManageOrders> {
     Widget continueButton = TextButton(
       child: Text("Yes"),
       onPressed:  () async {
-        await deleteOrderInDatabase(customer);
+        await deleteCustomerInDatabase(customer);
         Fluttertoast.showToast(
           msg: "Deleted successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -319,7 +331,7 @@ class _ManageOrdersState extends State<ManageOrders> {
     );
   }
 
-  showAlertDialogDismiss(BuildContext context, Customer customer) {
+  showAlertDialogComplete(BuildContext context, Customer customer) {
     final dialogContextCompleter = Completer<BuildContext>();
     // set up the buttons
     Widget cancelButton = TextButton(
@@ -329,7 +341,7 @@ class _ManageOrdersState extends State<ManageOrders> {
     Widget continueButton = TextButton(
       child: Text("Yes"),
       onPressed: () async {
-        await dismissOrderInDatabase(customer);
+        await dismissCustomerInDatabase(customer);
         final dialogContext = await dialogContextCompleter.future;
         Navigator.pop(dialogContext);
         Fluttertoast.showToast(
