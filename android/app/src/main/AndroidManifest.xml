@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ph.edu.dlsu.edu.lbycpd2.shoebusiness_manager">
    <application
-        android:label="shoebusiness_manager"
+        android:label="LE Manager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

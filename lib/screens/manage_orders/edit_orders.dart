@@ -82,6 +82,13 @@ class _EditOrdersState extends State<EditOrders> {
     return stockFields['color'];
   }
 
+  Future<List<String>> getStockNameAndColor(Order order) async {
+    String stockDocID = order.docID;
+    Map<String,dynamic> stockFields = await FirebaseFirestore.instance.collection('seacrest_inventory').doc(stockDocID).get()
+        .then((snapshot) => snapshot.data()!);
+    return [stockFields['name'], stockFields['color']];
+  }
+
   Widget buildCard(Order order){
     return Card(
         child: Padding(
@@ -292,7 +299,13 @@ class _EditOrdersState extends State<EditOrders> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Delete"),
-      content: Text("Are you sure you want to delete\n${order.docID}?"),
+      content: FutureBuilder<List<String>>(
+        future: getStockNameAndColor(order),
+        builder: (context, snapshot){
+          if (snapshot.hasData) return Text("Are you sure you want to delete\n${snapshot.data![0]} - ${snapshot.data![1]}?");
+          else return Text("Are you sure you want to delete\nNaN?");
+        }
+      ),
       actions: [
         cancelButton,
         continueButton,
