@@ -3,10 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:shoebusiness_manager/main.dart';
-import 'package:shoebusiness_manager/screens/main_menus/admin_main_menu.dart';
-import 'package:shoebusiness_manager/screens/main_menus/user_main_menu.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreen extends StatefulWidget {

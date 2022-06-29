@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image/image.dart';
 import '../../services/customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shoebusiness_manager/screens/inventory_menu/inventory.dart';
 import 'package:shoebusiness_manager/screens/manage_orders/add_items_order.dart';
 import '../../services/order.dart';
-import '../../services/stock.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 

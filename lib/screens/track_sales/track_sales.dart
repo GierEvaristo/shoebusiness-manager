@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shoebusiness_manager/screens/track_sales/generate_excel.dart';
-import 'package:shoebusiness_manager/screens/track_sales/track_sales.dart';
 import 'package:shoebusiness_manager/services/sales.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row, Column, Alignment;
 import 'dart:ui' as ui;

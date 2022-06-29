@@ -1,9 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shoebusiness_manager/screens/inventory_menu/view_stock.dart';
 import 'package:shoebusiness_manager/services/stock.dart';
 
 class ChooseStock extends StatefulWidget {

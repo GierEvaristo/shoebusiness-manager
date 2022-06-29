@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shoebusiness_manager/services/stock.dart';
-
 class Customer {
   late String name;
   late String address;

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shoebusiness_manager/screens/manage_orders/add_per_order.dart';
@@ -10,8 +9,6 @@ import 'package:shoebusiness_manager/screens/manage_orders/view_orders.dart';
 import 'package:shoebusiness_manager/services/customer.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
-
-import '../../services/order.dart';
 
 
 

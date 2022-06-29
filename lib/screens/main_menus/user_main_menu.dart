@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoebusiness_manager/main.dart';
-
+import 'package:flutter/services.dart';
 import '../report_sales/report_sales.dart';
 
 class UserMainMenu extends StatefulWidget {
@@ -33,43 +32,49 @@ class _UserMainMenuState extends State<UserMainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-          padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Welcome $username!',
-                style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return true;
+      },
+      child: Scaffold(
+          body: Padding(
+            padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Welcome $username!',
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold
+                  ),
+                  textDirection: TextDirection.ltr,
                 ),
-                textDirection: TextDirection.ltr,
-              ),
-              CustomButton(
-                  text: 'Manage Inventories',
-                  icon: Icons.inventory,
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/company_menu');
-                  }
-              ),
-              CustomButton(
-                  text: 'Report L. Evaristo Sales',
-                  icon: Icons.point_of_sale,
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        ReportSales(chosenBrand: 'l_evaristo')));
-                  }
-              ),
-              CustomButton(
-                  text: 'Logout',
-                  icon: Icons.logout,
-                  onPressed: (){signOut(context);}
-              ),
-            ],
-          ),
-        )
+                CustomButton(
+                    text: 'Manage Inventories',
+                    icon: Icons.inventory,
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/company_menu');
+                    }
+                ),
+                CustomButton(
+                    text: 'Report L. Evaristo Sales',
+                    icon: Icons.point_of_sale,
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                          ReportSales(chosenBrand: 'l_evaristo')));
+                    }
+                ),
+                CustomButton(
+                    text: 'Logout',
+                    icon: Icons.logout,
+                    onPressed: (){signOut(context);}
+                ),
+              ],
+            ),
+          )
+      ),
     );
   }
 

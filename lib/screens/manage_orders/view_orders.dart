@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image/image.dart';
 import '../../services/customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shoebusiness_manager/screens/inventory_menu/inventory.dart';
 import '../../services/order.dart';
-import '../../services/stock.dart';
-
-
 
 class ViewOrders extends StatefulWidget {
   late Customer currentCustomer;

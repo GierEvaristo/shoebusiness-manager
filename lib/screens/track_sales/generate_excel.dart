@@ -1,15 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:shoebusiness_manager/screens/inventory_menu/view_stock.dart';
-import 'package:shoebusiness_manager/services/stock.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row, Column, Alignment;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:open_file/open_file.dart';
 
 
 import '../../services/sales.dart';

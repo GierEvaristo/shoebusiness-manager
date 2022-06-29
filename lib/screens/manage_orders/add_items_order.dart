@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:shoebusiness_manager/screens/report_sales/choose_stock.dart';
 import '../../services/customer.dart';
-import '../../services/stock.dart';
 
 
 class AddItemsOrder extends StatefulWidget {
