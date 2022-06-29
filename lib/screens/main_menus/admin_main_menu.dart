@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shoebusiness_manager/main.dart';
 
 import '../report_sales/report_sales.dart';
@@ -30,6 +31,7 @@ class _AdminMainMenuState extends State<AdminMainMenu> {
       username = snapshot['name'];
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,9 @@ class _AdminMainMenuState extends State<AdminMainMenu> {
             CustomButton(
                 text: 'Logout',
                 icon: Icons.logout,
-                onPressed: (){signOut(context);}
+                onPressed: (){
+                  signOut(context);
+                }
             ),
           ],
         ),

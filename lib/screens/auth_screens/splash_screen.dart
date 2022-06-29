@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:shoebusiness_manager/main.dart';
 import 'package:shoebusiness_manager/screens/main_menus/admin_main_menu.dart';
 import 'package:shoebusiness_manager/screens/main_menus/user_main_menu.dart';
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
 
-  void checkRole() async{
+  void checkRole() async {
     User user = FirebaseAuth.instance.currentUser!;
     final DocumentSnapshot snapshot =
     await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
@@ -34,21 +35,27 @@ class _SplashScreenState extends State<SplashScreen> {
       print(admin);
     });
 
-    if (admin == true){
-      Timer(Duration(milliseconds: 750),() {
-        Navigator.pushNamed(context, '/admin_main_menu');
+    if (admin == true) {
+      Timer(Duration(milliseconds: 750),() async {
+        await Navigator.pushNamed(context, '/admin_main_menu');
+        await SystemNavigator.pop();
       });
     }
     else {
-      Timer(Duration(milliseconds: 750),() {
+      Timer(Duration(milliseconds: 750),() async {
         Navigator.pushNamed(context, '/user_main_menu');
+        await SystemNavigator.pop();
       });
     }
   }
 
+  Future signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.amber,
       body: Center(
