@@ -32,62 +32,67 @@ class _AdminMainMenuState extends State<AdminMainMenu> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Welcome $username!',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold
-             ),
-              textDirection: TextDirection.ltr,
-            ),
-            CustomButton(
-                text: 'Manage Inventories',
-                icon: Icons.inventory,
-                onPressed: (){
-                  Navigator.pushNamed(context, '/company_menu');
-                }
-            ),
-            CustomButton(
-                text: 'Report L. Evaristo Sales',
-                icon: Icons.point_of_sale,
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                      ReportSales(chosenBrand: 'l_evaristo')));
-                }
-            ),
-            CustomButton(
-                text: 'Manage Seacrest Orders',
-                icon: Icons.checklist_rounded,
-                onPressed: (){
-                  Navigator.pushNamed(context,'/manage_orders');
-                }
-            ),
-            CustomButton(
-                text: 'View Sales Report',
-                icon: Icons.receipt_long_rounded,
-                onPressed: (){
-                  Navigator.pushNamed(context,'/track_sales_menu');
-                }
-            ),
-            CustomButton(
-                text: 'Logout',
-                icon: Icons.logout,
-                onPressed: (){
-                  signOut(context);
-                }
-            ),
-          ],
-        ),
-      )
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return true;
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.only(right: 30, left: 30, top: 90, bottom: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Welcome $username!',
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold
+               ),
+                textDirection: TextDirection.ltr,
+              ),
+              CustomButton(
+                  text: 'Manage Inventories',
+                  icon: Icons.inventory,
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/company_menu');
+                  }
+              ),
+              CustomButton(
+                  text: 'Report L. Evaristo Sales',
+                  icon: Icons.point_of_sale,
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        ReportSales(chosenBrand: 'l_evaristo')));
+                  }
+              ),
+              CustomButton(
+                  text: 'Manage Seacrest Orders',
+                  icon: Icons.checklist_rounded,
+                  onPressed: (){
+                    Navigator.pushNamed(context,'/manage_orders');
+                  }
+              ),
+              CustomButton(
+                  text: 'View Sales Report',
+                  icon: Icons.receipt_long_rounded,
+                  onPressed: (){
+                    Navigator.pushNamed(context,'/track_sales_menu');
+                  }
+              ),
+              CustomButton(
+                  text: 'Logout',
+                  icon: Icons.logout,
+                  onPressed: (){
+                    signOut(context);
+                  }
+              ),
+            ],
+          ),
+        )
+      ),
     );
   }
 

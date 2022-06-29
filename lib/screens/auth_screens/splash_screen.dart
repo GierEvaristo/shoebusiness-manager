@@ -36,15 +36,13 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     if (admin == true) {
-      Timer(Duration(milliseconds: 750),() async {
-        await Navigator.pushNamed(context, '/admin_main_menu');
-        await SystemNavigator.pop();
+      Timer(Duration(milliseconds: 750),() {
+        Navigator.pushNamed(context, '/admin_main_menu');
       });
     }
     else {
-      Timer(Duration(milliseconds: 750),() async {
+      Timer(Duration(milliseconds: 750),() {
         Navigator.pushNamed(context, '/user_main_menu');
-        await SystemNavigator.pop();
       });
     }
   }
